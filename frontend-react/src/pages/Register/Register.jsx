@@ -1,21 +1,22 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
-import './Login.css'
+import './Register.css'
 
-function Login() {
+function Register() {
     const { login } = useAuth();
 
     return (
         <div>
             <div className="container">
-                <p className="hello-word">Witaj</p>
-                <p className="login-word">Zaloguj się</p>
+                <p className="join-word">Dołącz!</p>
+                <p className="register-word">Zarejestruj się</p>
                 <p className="email-word">E-mail</p>
                 <input className="email-input-data" type={"text"}/>
                 <p className="email-word">Hasło</p>
                 <input className="password-input-data" type={"text"}/>
-                <button className="login-button">Zaloguj</button>
-                <button className="nav-register-button">Nie masz konta? Kliknij tutaj!</button>
+                <p className="email-word">Powtórz hasło</p>
+                <input className="repeat-password-input-data" type={"text"}/>
+                <button className="register-button">Zarejestruj</button>
             </div>
 
 
@@ -23,4 +24,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;

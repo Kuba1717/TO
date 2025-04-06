@@ -10,26 +10,27 @@
     margin: 20px auto;
 }
 
-.hello-word {
+.join-word {
     color: #2F2F2F;
     font-family: 'Poppins', sans-serif;
     font-size: 2rem;
-    margin-left: 8%;
+    margin-left: 5%;
     margin-bottom: 0;
 }
 
-.login-word {
+.register-word {
     color: #903CE9;
     font-family: 'Poppins', sans-serif;
     font-size: 3rem;
     font-weight: 900;
-    margin-left: 8%;
+    margin-left: 5%;
     margin-top: -5px;
     margin-bottom: 10px;
 }
 
 .email-input-data,
-.password-input-data {
+.password-input-data,
+.repeat-password-input-data{
     border-radius: 20px;
     border: 2px solid #903CE9;
     margin: 10px auto;
@@ -40,16 +41,18 @@
     box-sizing: border-box;
 }
 
-.email-input-data {
+.email-input-data,
+.repeat-password-input-data{
     background: #ffffff;
 }
 
-.password-input-data {
+.password-input-data{
     background: #ECECEC;
 }
 
 .email-input-data:focus,
-.password-input-data:focus {
+.password-input-data:focus,
+.repeat-password-input-data:focus{
     outline: none;
 }
 
@@ -61,7 +64,7 @@
     margin-bottom: -1%;
 }
 
-.login-button {
+.register-button {
     background: #903CE9;
     border-radius: 20px;
     margin: 40px auto 60px auto;
@@ -73,31 +76,12 @@
     cursor: pointer;
 }
 
-.login-button:hover {
+.register-button:hover {
     background: #7619DA;
     border-color: #7619DA;
 }
 
-.login-button:active {
+.register-button:active {
     background: #AA6AEE;
     border-color: #AA6AEE;
-}
-
-
-.nav-register-button {
-    background: #ffffff;
-    color: #7619DA;
-    border-radius: 20px;
-    margin: 0 auto 0 auto;
-    font-family: 'Poppins', sans-serif;
-    width: 80%;
-    max-width: 300px;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-}
-
-
-.nav-register-button:active {
-    color: #AA6AEE;
 }
