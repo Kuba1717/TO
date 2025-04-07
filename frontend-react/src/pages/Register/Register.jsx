@@ -7,7 +7,7 @@ function Register() {
 
     return (
         <div>
-            <div className="container">
+            <div className="register-container">
                 <p className="join-word">Dołącz!</p>
                 <p className="register-word">Zarejestruj się</p>
                 <p className="email-word">E-mail</p>

@@ -1,0 +1,96 @@
+.offer-list {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    width: 100%;
+    padding: 20px;
+    margin: 55px 10px;
+}
+
+.offer-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-width: 80%;
+    transition: transform 0.2s;
+}
+
+.offer-card:hover {
+    transform: scale(1.02);
+}
+
+.offer-card img {
+    width: 150px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.offer-title {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #333;
+
+}
+
+.offer-location {
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: auto;
+
+}
+.offer-price {
+    color: #903CE9;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-left: auto;
+    margin-top: auto;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #903CE9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #752acc;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: default;
+}
+
+.offer-list-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.offer-card img {
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.offer-list-vertical-container {
+    display: flex;
+    flex-direction: column;
+
+}

@@ -6,6 +6,7 @@ import PublicRoute from './PublicRoute';
 import Home from '../pages/Home/Home.jsx';
 import Login from '../pages/Login/Login.jsx';
 import Register from "../pages/Register/Register.jsx";
+import Main from "../pages/Main/Main.jsx";
 
 function AppRoutes() {
     return (
@@ -15,6 +16,7 @@ function AppRoutes() {
                     <Route element={<PublicRoute />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/main" element={<Main />} />
 
                     </Route>
 

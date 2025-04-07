@@ -1,0 +1,92 @@
+.header, .header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    color: #903CE9;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+}
+
+.header-nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-nav-buttons button {
+    padding: 8px 36px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s;
+    border: 2px solid #903CE9;
+}
+
+.header-nav-login-button {
+    background-color: #903CE9;
+    color: #fff;
+}
+
+.header-nav-register-button {
+    background-color: #fff;
+    color: #903CE9;
+}
+
+.header-nav-login-button:hover {
+    background-color: #7619DA;
+}
+
+.header-nav-register-button:hover {
+    background-color: #f0f0f0;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .header {
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .header-nav-buttons {
+        gap: 5px;
+    }
+
+    .header-nav-buttons button {
+        padding: 6px 20px;
+        font-size: 0.7rem;
+    }
+}
+
+
+@media only screen and (min-width: 601px) and (max-width: 992px) {
+    .header {
+        padding: 18px;
+    }
+
+    .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .header-nav-buttons button {
+        padding: 7px 30px;
+        font-size: 0.75rem;
+    }
+}

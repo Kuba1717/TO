@@ -1,0 +1,7 @@
+.main-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    margin: 20px auto;
+    width: 100%;
+}
+

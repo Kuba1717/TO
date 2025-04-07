@@ -1,13 +1,17 @@
-.container {
+.register-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: #ffffff;
     border-radius: 20px;
     border: 2px solid #903CE9;
-    width: 90%;
     padding: 40px;
-    margin: 20px auto;
+    width: 60%;
+    max-width: 400px;
+    min-height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
 }
 
 .join-word {
@@ -30,7 +34,7 @@
 
 .email-input-data,
 .password-input-data,
-.repeat-password-input-data{
+.repeat-password-input-data {
     border-radius: 20px;
     border: 2px solid #903CE9;
     margin: 10px auto;
@@ -42,17 +46,17 @@
 }
 
 .email-input-data,
-.repeat-password-input-data{
+.repeat-password-input-data {
     background: #ffffff;
 }
 
-.password-input-data{
+.password-input-data {
     background: #ECECEC;
 }
 
 .email-input-data:focus,
 .password-input-data:focus,
-.repeat-password-input-data:focus{
+.repeat-password-input-data:focus {
     outline: none;
 }
 
@@ -84,4 +88,86 @@
 .register-button:active {
     background: #AA6AEE;
     border-color: #AA6AEE;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+        margin: 10px auto;
+    }
+
+    .join-word {
+        font-size: 1rem;
+        margin-left: 3%;
+    }
+
+    .register-word {
+        font-size: 2rem;
+        margin-left: 3%;
+        margin-top: -3px;
+    }
+
+    .email-input-data,
+    .password-input-data,
+    .repeat-password-input-data {
+        width: 90%;
+        max-width: none;
+        padding: 10px;
+    }
+
+    .email-word {
+        font-size: 0.9rem;
+        margin-left: 10%;
+    }
+
+    .register-button {
+        width: 90%;
+        max-width: none;
+        padding: 8px;
+        font-size: 0.9rem;
+        margin: 20px auto 40px auto;
+    }
+}
+
+
+@media only screen and (min-width: 601px) and (max-width: 992px) {
+    .container {
+        width: 90%;
+        padding: 30px;
+        margin: 15px auto;
+    }
+
+    .join-word {
+        font-size: 1.8rem;
+        margin-left: 4%;
+    }
+
+    .register-word {
+        font-size: 2.8rem;
+        margin-left: 4%;
+        margin-top: -4px;
+    }
+
+    .email-input-data,
+    .password-input-data,
+    .repeat-password-input-data {
+        width: 85%;
+        max-width: 300px;
+        padding: 12px;
+    }
+
+    .email-word {
+        font-size: 1rem;
+        margin-left: 15%;
+    }
+
+    .register-button {
+        width: 85%;
+        max-width: 300px;
+        padding: 10px;
+        font-size: 1rem;
+        margin: 30px auto 50px auto;
+    }
 }
