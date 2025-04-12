@@ -1,15 +1,14 @@
 package org.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.util.Date;
 
 @Entity
 @Table(name = "refresh_tokens")
-@Getter
-@Setter
+@Data
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

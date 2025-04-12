@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -60,11 +61,11 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse register(RegisterRequest registerRequest) {
         logger.info("Registering user with email: {}", registerRequest.getEmail());
 
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(registerRequest.getUsername()))) {
             throw new UsernameAlreadyExistsException(registerRequest.getUsername());
         }
 
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(registerRequest.getEmail()))) {
             throw new EmailAlreadyExistsException(registerRequest.getEmail());
         }
 
@@ -72,18 +73,35 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-
-        Role userRole = roleRepository.findByName(RoleName.CLIENT)
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", RoleName.CLIENT));
-
         Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        user.setRoles(roles);
+
+        if (registerRequest.getRoles() != null && !registerRequest.getRoles().isEmpty()) {
+            registerRequest.getRoles().forEach(roleName -> {
+                try {
+                    RoleName enumRole = RoleName.valueOf(roleName.toUpperCase());
+                    Role role = roleRepository.findByName(enumRole)
+                            .orElseThrow(() -> new ResourceNotFoundException("Role", "name", enumRole));
+                    roles.add(role);
+                } catch (IllegalArgumentException e) {
+                    logger.warn("Invalid role name: {}", roleName);
+                }
+            });
+        }
+
+        if (roles.isEmpty()) {
+            Role userRole = roleRepository.findByName(RoleName.CLIENT)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role", "name", RoleName.CLIENT));
+            roles.add(userRole);
+        }
 
         User savedUser = userRepository.save(user);
         logger.info("User registered successfully with ID: {}", savedUser.getId());
 
-        return new UserResponse(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        Set<String> userRoles = savedUser.getRoles().stream()
+                .map(role -> role.getName().toString())
+                .collect(Collectors.toSet());
+
+        return new UserResponse(savedUser.getId(),savedUser.getUsername(), savedUser.getEmail(), userRoles);
     }
 
     public Map<String, String> login(LoginRequest loginRequest) {

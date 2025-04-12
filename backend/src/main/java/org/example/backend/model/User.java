@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,7 +36,19 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(email, user.email);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
 
 
 }
