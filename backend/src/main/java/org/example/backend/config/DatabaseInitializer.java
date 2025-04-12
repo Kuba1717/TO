@@ -34,7 +34,21 @@ public class DatabaseInitializer {
                 }
             }
 
+            if (Boolean.FALSE.equals(userRepository.existsByEmail("admin@example.com"))) {
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setEmail("admin@example.com");
+                admin.setPassword(passwordEncoder.encode("admin"));
 
+                Role adminRole = roleRepository.findByName(RoleName.ADMIN)
+                        .orElseThrow(() -> new RuntimeException("Error: Admin Role not found."));
+
+                Set<Role> roles = new HashSet<>();
+                roles.add(adminRole);
+                admin.setRoles(roles);
+
+                userRepository.save(admin);
+            }
         };
     }
 }
