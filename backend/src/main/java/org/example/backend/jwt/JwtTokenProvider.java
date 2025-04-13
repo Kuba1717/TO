@@ -11,6 +11,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class JwtTokenProvider {
@@ -25,8 +26,12 @@ public class JwtTokenProvider {
     private Long refreshExpiration;
 
     public String generateAccessToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("nonce", UUID.randomUUID().toString());
+
         return Jwts.builder()
-                .setClaims(new HashMap<>())
+                .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -37,6 +42,7 @@ public class JwtTokenProvider {
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("tokenType", "refresh");
+        claims.put("nonce", UUID.randomUUID().toString());
 
         return Jwts.builder()
                 .setClaims(claims)
