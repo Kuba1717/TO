@@ -22,6 +22,10 @@
     font-size: 2rem;
 }
 
+.header-title {
+    cursor: pointer;
+}
+
 .header-nav-buttons {
     display: flex;
     gap: 10px;
@@ -55,6 +59,54 @@
     background-color: #f0f0f0;
 }
 
+.header-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-email-display {
+    font-size: 0.8rem;
+    color: #666;
+    margin-right: 10px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.profile-button {
+    background-color: #fff;
+    color: #903CE9;
+}
+
+.profile-button:hover {
+    background-color: #f0f0f0;
+}
+
+.logout-button {
+    background-color: #fff;
+    color: #903CE9;
+}
+
+.logout-button:hover {
+    background-color: #f0f0f0;
+}
+
+.button-icon {
+    font-size: 1.5rem;
+}
 
 @media only screen and (max-width: 600px) {
     .header {
@@ -73,8 +125,16 @@
         padding: 6px 20px;
         font-size: 0.7rem;
     }
-}
 
+    .icon-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .button-icon {
+        font-size: 1.3rem;
+    }
+}
 
 @media only screen and (min-width: 601px) and (max-width: 992px) {
     .header {
@@ -88,5 +148,15 @@
     .header-nav-buttons button {
         padding: 7px 30px;
         font-size: 0.75rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .user-email-display {
+        display: none;
+    }
+
+    .header-buttons-container {
+        gap: 10px;
     }
 }
