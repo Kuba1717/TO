@@ -68,7 +68,9 @@
 .register-button {
     background: #903CE9;
     border-radius: 20px;
-    margin: 40px auto 60px auto;
+
+    margin-top: 40px;
+    margin-bottom: 16px;
     font-family: 'Poppins', sans-serif;
     width: 80%;
     max-width: 300px;
@@ -96,7 +98,6 @@
     font-family: 'Poppins', sans-serif;
     width: 80%;
     max-width: 300px;
-    padding: 10px;
     border: none;
     cursor: pointer;
 }
@@ -133,10 +134,16 @@
         margin-left: 10%;
     }
 
-    .register-button, .nav-register-button {
+    .register-button {
         width: 90%;
         max-width: none;
         padding: 8px;
+        font-size: 0.9rem;
+    }
+    .nav-register-button
+    {
+        width: 90%;
+        max-width: none;
         font-size: 0.9rem;
     }
 }

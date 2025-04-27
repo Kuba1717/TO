@@ -3,9 +3,9 @@ import { Outlet, Navigate } from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.jsx";
 
 function PublicRoute() {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, loading } = useAuth();
 
-    if (isAuthenticated === null) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 

@@ -13,16 +13,25 @@ function AppRoutes() {
         <BrowserRouter>
             <AuthProvider>
                 <Routes>
+                    <Route path="/main" element={<Main />} />
+
                     <Route element={<PublicRoute />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/main" element={<Main />} />
 
                     </Route>
 
                     <Route element={<PrivateRoute />}>
                         <Route path="/home" element={<Home />} />
                     </Route>
+
+                    {/*<Route element={<PrivateRoute requiredRole="ADMIN" />}>*/}
+                    {/*    <Route path="/admin" element={<Admin />} />*/}
+                    {/*</Route>*/}
+
+                    {/*<Route element={<PrivateRoute requiredRole="STORE_MANAGER" />}>*/}
+                    {/*    <Route path="/manager" element={<Manager />} />*/}
+                    {/*</Route>*/}
 
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

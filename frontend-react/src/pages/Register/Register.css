@@ -71,7 +71,8 @@
 .register-button {
     background: #903CE9;
     border-radius: 20px;
-    margin: 40px auto 60px auto;
+
+    margin: 40px auto 10px auto;
     font-family: 'Poppins', sans-serif;
     width: 80%;
     max-width: 300px;
@@ -88,6 +89,22 @@
 .register-button:active {
     background: #AA6AEE;
     border-color: #AA6AEE;
+}
+
+.nav-register-button {
+    background: #ffffff;
+    color: #7619DA;
+    border-radius: 20px;
+    margin: 0 auto;
+    font-family: 'Poppins', sans-serif;
+    width: 80%;
+    max-width: 300px;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-register-button:active {
+    color: #AA6AEE;
 }
 
 
@@ -113,8 +130,8 @@
     .password-input-data,
     .repeat-password-input-data {
         width: 90%;
-        max-width: none;
-        padding: 10px;
+        max-width: 300px;
+        padding: 12px;
     }
 
     .email-word {
@@ -128,6 +145,13 @@
         padding: 8px;
         font-size: 0.9rem;
         margin: 20px auto 40px auto;
+    }
+
+    .nav-register-button
+    {
+        width: 90%;
+        max-width: none;
+        font-size: 0.9rem;
     }
 }
 
@@ -153,7 +177,7 @@
     .email-input-data,
     .password-input-data,
     .repeat-password-input-data {
-        width: 85%;
+        width: 90%;
         max-width: 300px;
         padding: 12px;
     }
@@ -163,8 +187,8 @@
         margin-left: 15%;
     }
 
-    .register-button {
-        width: 85%;
+    .register-button .nav-register-button{
+        width: 90%;
         max-width: 300px;
         padding: 10px;
         font-size: 1rem;
