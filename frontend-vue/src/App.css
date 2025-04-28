@@ -1,4 +1,4 @@
-#app {
+#root {
     max-width: 1280px;
     margin: 0 auto;
     padding: 2rem;
@@ -14,8 +14,8 @@
 .logo:hover {
     filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
+.logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {

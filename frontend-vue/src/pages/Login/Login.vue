@@ -21,7 +21,7 @@
       />
 
       <button
-          class="register-button"
+          class="login-button"
           @click="handleLogin"
           :disabled="loading"
       >

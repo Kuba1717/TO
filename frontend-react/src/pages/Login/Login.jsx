@@ -53,7 +53,7 @@ function Login() {
 
 
                 <button
-                    className="register-button"
+                    className="login-button"
                     onClick={handleLogin}
                     disabled={loading}
                 >

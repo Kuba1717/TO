@@ -65,27 +65,24 @@
     margin-bottom: -1%;
 }
 
-.register-button {
+.login-button {
     background: #903CE9;
     border-radius: 20px;
-
-    margin-top: 40px;
-    margin-bottom: 16px;
+    margin: 40px auto 8px auto;
     font-family: 'Poppins', sans-serif;
     width: 80%;
     max-width: 300px;
     padding: 10px;
     border: none;
     cursor: pointer;
-    color: white;
 }
 
-.register-button:hover {
+.login-button:hover {
     background: #7619DA;
     border-color: #7619DA;
 }
 
-.register-button:active {
+.login-button:active {
     background: #AA6AEE;
     border-color: #AA6AEE;
 }
@@ -98,6 +95,7 @@
     font-family: 'Poppins', sans-serif;
     width: 80%;
     max-width: 300px;
+    padding: 10px;
     border: none;
     cursor: pointer;
 }
@@ -105,6 +103,8 @@
 .nav-register-button:active {
     color: #AA6AEE;
 }
+
+
 
 @media only screen and (max-width: 600px) {
     .container {
@@ -134,19 +134,14 @@
         margin-left: 10%;
     }
 
-    .register-button {
+    .login-button, .nav-register-button {
         width: 90%;
         max-width: none;
         padding: 8px;
         font-size: 0.9rem;
     }
-    .nav-register-button
-    {
-        width: 90%;
-        max-width: none;
-        font-size: 0.9rem;
-    }
 }
+
 
 @media only screen and (min-width: 601px) and (max-width: 992px) {
     .container {
@@ -177,10 +172,11 @@
         margin-left: 15%;
     }
 
-    .register-button, .nav-register-button {
+    .login-button, .nav-register-button {
         width: 85%;
         max-width: 300px;
         padding: 10px;
         font-size: 1rem;
     }
 }
+

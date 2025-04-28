@@ -1,0 +1,40 @@
+.filter {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 20px;
+    border: 2px solid #903CE9;
+    width: 20%;
+    padding: 20px;
+    margin: 75px 10px;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.filter-title {
+    color: #2F2F2F;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+}
+
+.filter-category-title {
+    color: #2F2F2F;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+}
+
+.filter-input-data {
+    border-radius: 20px;
+    border: 2px solid #903CE9;
+    background: #ffffff;
+    width: 100%;
+    padding: 15px;
+    color: #903CE9;
+    box-sizing: border-box;
+}
