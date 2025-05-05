@@ -200,8 +200,10 @@ class AuthServiceImplTest {
 
     @Test
     void testLogout() {
-        authService.logout("test@example.com", "refresh_token");
+        authService.logout("test@example.com", "access_token","refresh_token");
 
         verify(tokenBlacklistService).blacklistToken("refresh_token", "test@example.com");
+        verify(tokenBlacklistService).blacklistToken("access_token", "test@example.com");
+
     }
 }

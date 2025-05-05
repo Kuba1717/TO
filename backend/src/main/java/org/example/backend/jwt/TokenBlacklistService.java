@@ -13,19 +13,32 @@ import java.util.Date;
 public class TokenBlacklistService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final ServerStartupManager serverStartupManager;
     private final Logger logger = LoggerFactory.getLogger(TokenBlacklistService.class);
     private final BlacklistedTokenRepository blacklistedTokenRepository;
 
     public TokenBlacklistService(BlacklistedTokenRepository blacklistedTokenRepository,
                                  JwtTokenProvider jwtTokenProvider,
-                                 UserRepository userRepository) {
+                                 UserRepository userRepository,
+                                 ServerStartupManager serverStartupManager) {
         this.blacklistedTokenRepository = blacklistedTokenRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
+        this.serverStartupManager = serverStartupManager;
     }
 
     public boolean isTokenBlacklisted(String token) {
         return blacklistedTokenRepository.existsByToken(token);
+    }
+
+    public boolean isTokenIssuedBeforeServerStart(String token) {
+        try {
+            Date issuedAt = jwtTokenProvider.getIssuedAtFromToken(token);
+            return issuedAt != null && issuedAt.before(serverStartupManager.getServerStartupTime());
+        } catch (Exception e) {
+            logger.error("Error checking token issue time: {}", e.getMessage());
+            return true;
+        }
     }
 
     public void blacklistToken(String token, String username) {
@@ -50,4 +63,3 @@ public class TokenBlacklistService {
         }
     }
 }
-

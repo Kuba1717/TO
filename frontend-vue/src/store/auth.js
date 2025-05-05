@@ -77,6 +77,7 @@ export const useAuthStore = defineStore('auth', {
                 if (this.refreshToken) {
                     await apiClient.post('/api/auth/logout', {
                         email: this.user?.email,
+                        accessToken: this.accessToken,
                         refreshToken: this.refreshToken
                     }, {
                         headers: {
