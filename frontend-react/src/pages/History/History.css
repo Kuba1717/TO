@@ -1,0 +1,76 @@
+.history-page-container {
+    display: flex;
+    margin: 100px auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    max-height: 600px;
+    transition: transform 0.2s;
+}
+
+.history-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-title {
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 2rem;
+}
+
+.history-offer-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-width: 80%;
+    transition: transform 0.2s;
+}
+
+.history-offer-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.history-offer-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.history-offer-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #333;
+
+}
+
+.history-offer-text {
+    font-size: 0.7rem;
+    color: #333;
+    margin-top: auto;
+
+}
+.history-offer-price {
+    color: #903CE9;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-left: auto;
+    margin-top: auto;
+}

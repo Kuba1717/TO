@@ -7,31 +7,33 @@ import Home from '../pages/Home/Home.jsx';
 import Login from '../pages/Login/Login.jsx';
 import Register from "../pages/Register/Register.jsx";
 import Main from "../pages/Main/Main.jsx";
+import Offer from "../pages/Offer/Offer.jsx";
+import Book from "../pages/Book/Book.jsx";
+import Profile from "../pages/Profile/Profile.jsx";
+import Success from "../pages/Success/Success.jsx";
+import History from "../pages/History/History.jsx";
+import AddOffer from "../pages/AddOffer/AddOffer.jsx";
 
 function AppRoutes() {
     return (
         <BrowserRouter>
             <AuthProvider>
                 <Routes>
-                    <Route path="/main" element={<Main />} />
-
                     <Route element={<PublicRoute />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-
                     </Route>
 
                     <Route element={<PrivateRoute />}>
                         <Route path="/home" element={<Home />} />
+                        <Route path="/main" element={<Main />} />
+                        <Route path="/offer" element={<Offer />} />
+                        <Route path="/book" element={<Book />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/history" element={<History />} />
+                        <Route path="/success" element={<Success />} />
+                        <Route path="/addOffer" element={<AddOffer />} />
                     </Route>
-
-                    {/*<Route element={<PrivateRoute requiredRole="ADMIN" />}>*/}
-                    {/*    <Route path="/admin" element={<Admin />} />*/}
-                    {/*</Route>*/}
-
-                    {/*<Route element={<PrivateRoute requiredRole="STORE_MANAGER" />}>*/}
-                    {/*    <Route path="/manager" element={<Manager />} />*/}
-                    {/*</Route>*/}
 
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

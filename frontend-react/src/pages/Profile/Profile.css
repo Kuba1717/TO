@@ -1,0 +1,68 @@
+.profile-page-container {
+    display: flex;
+    margin: 70px auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    max-height: 600px;
+    transition: transform 0.2s;
+}
+
+.profile-title {
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.profile-category-text {
+    color: #000000;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.profile-data-text {
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.profile-ok-button {
+    background: #903CE9;
+    border-radius: 20px;
+    margin: 20px auto 0 auto;
+    font-family: 'Poppins', sans-serif;
+    width: 50%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.id-icon {
+    color: #903CE9;
+    font-size: 4rem;
+}

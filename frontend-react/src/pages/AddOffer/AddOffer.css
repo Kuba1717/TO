@@ -1,0 +1,93 @@
+.add-offer-page-container {
+    display: flex;
+    margin: 100px auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-offer-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    transition: transform 0.2s;
+}
+
+.add-offer-title {
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 2rem;
+}
+
+.add-offer-horizontal-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.add-offer-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-offer-input {
+    border-radius: 20px;
+    background: #ffffff;
+    border: 2px solid #903CE9;
+    margin: 10px auto;
+    width: 80%;
+    max-width: 300px;
+    padding: 15px;
+    color: #903CE9;
+    box-sizing: border-box;
+}
+
+.add-offer-big-input {
+    border-radius: 20px;
+    background: #ffffff;
+    border: 2px solid #903CE9;
+    margin: 10px auto;
+    height: 120px;
+    width: 80%;
+    max-width: 300px;
+    padding: 15px;
+    color: #903CE9;
+    box-sizing: border-box;
+
+}
+
+.add-offer-category-text {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    margin-left: 20%;
+    margin-bottom: 0;
+}
+
+.add-offer-container img {
+    width: 300px;
+    height: auto;
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
+.add-icon {
+    color: #903CE9;
+    font-size: 3rem;
+    margin: 10px auto 0;
+}
+
+.add-offer-confirm-button{
+    background-color: #903CE9;
+    border-radius: 20px;
+    min-width: 150px;
+    margin: 20px 0 0 auto;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+
+}
