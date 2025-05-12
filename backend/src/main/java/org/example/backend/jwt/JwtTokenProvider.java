@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -24,33 +23,27 @@ public class JwtTokenProvider {
     private Long refreshExpiration;
 
     public String generateAccessToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("nonce", UUID.randomUUID().toString());
-        claims.put("roles", userDetails.getAuthorities().stream()
-                .map(authority -> authority.getAuthority())
-                .toList());
-
+        Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(userDetails.getUsername())
-
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expiration))
+                .claim("nonce", UUID.randomUUID().toString())
+                .claim("roles", userDetails.getAuthorities().stream()
+                        .map(authority -> authority.getAuthority())
+                        .toList())
                 .signWith(getSigningKey())
                 .compact();
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("tokenType", "refresh");
-        claims.put("nonce", UUID.randomUUID().toString());
-
+        Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshExpiration))
+                .claim("tokenType", "refresh")
+                .claim("nonce", UUID.randomUUID().toString())
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -76,6 +69,15 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();
+    }
+
+    public Date getIssuedAtFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getIssuedAt();
     }
 
     public List<String> getRolesFromToken(String token) {
@@ -105,13 +107,17 @@ public class JwtTokenProvider {
     }
 
     public boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-        return expiration.before(new Date());
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration()
+                    .before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     public boolean isRefreshToken(String token) {

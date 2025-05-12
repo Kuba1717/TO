@@ -20,7 +20,6 @@ public class DatabaseInitializer {
 
     @Bean
     @Transactional
-
     public CommandLineRunner initDatabase(
             RoleRepository roleRepository,
             UserRepository userRepository,

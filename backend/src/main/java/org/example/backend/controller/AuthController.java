@@ -50,13 +50,14 @@ public class AuthController {
     public ResponseEntity<String> logout(@RequestBody Map<String, String> request) {
         logger.info("Logout request received");
         String email = request.get("email");
+        String accessToken = request.get("accessToken");
         String refreshToken = request.get("refreshToken");
 
         if (email == null) {
             return ResponseEntity.badRequest().body("Email is required");
         }
 
-        authService.logout(email, refreshToken);
+        authService.logout(email, accessToken, refreshToken);
         return ResponseEntity.ok("Logged out successfully");
     }
 }

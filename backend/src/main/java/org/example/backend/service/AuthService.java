@@ -10,6 +10,6 @@ public interface AuthService {
     UserResponse register(RegisterRequest registerRequest);
     Map<String, String> login(LoginRequest loginRequest);
     Map<String, String> refreshToken(String refreshToken);
-    void logout(String email, String refreshToken);
+    void logout(String email,String accessToken, String refreshToken);
 }
 

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '../store/auth'
+import router from "../router/index.js";
 
 const api = axios.create({
     baseURL: 'http://localhost:8080',
@@ -33,6 +34,9 @@ api.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${refreshResponse.accessToken}`
                 return api(originalRequest)
             } catch (refreshError) {
+
+                authStore.clearAuth()
+                await router.push('/login')
                 return Promise.reject(refreshError)
             }
         }

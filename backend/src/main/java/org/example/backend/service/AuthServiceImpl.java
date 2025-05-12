@@ -136,6 +136,10 @@ public class AuthServiceImpl implements AuthService {
             throw new TokenRefreshException(refreshToken, "Refresh token is blacklisted");
         }
 
+        if (tokenBlacklistService.isTokenIssuedBeforeServerStart(refreshToken)) {
+            throw new TokenRefreshException(refreshToken, "Refresh token was issued before server startup");
+        }
+
         if (!jwtTokenProvider.isRefreshToken(refreshToken)) {
             throw new TokenRefreshException(refreshToken, "Invalid refresh token");
         }
@@ -168,8 +172,14 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    public void logout(String email, String refreshToken) {
+
+    public void logout(String email, String accessToken, String refreshToken) {
         logger.info("Processing logout for email: {}", email);
+
+        if (accessToken != null && !accessToken.isEmpty()) {
+            tokenBlacklistService.blacklistToken(accessToken, email);
+            logger.info("Access token blacklisted during logout for user: {}", email);
+        }
 
         if (refreshToken != null && !refreshToken.isEmpty()) {
             tokenBlacklistService.blacklistToken(refreshToken, email);
