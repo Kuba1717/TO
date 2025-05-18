@@ -40,6 +40,33 @@ class Statistics {
             max: this.max(values)
         };
     }
+
+    identifyOutliersIQR(values, threshold = 1.5) {
+        if (!values || values.length <= 3) return [];
+
+        const sorted = [...values].sort((a, b) => a - b);
+        const q1Index = Math.floor(sorted.length * 0.25);
+        const q3Index = Math.floor(sorted.length * 0.75);
+
+        const q1 = sorted[q1Index];
+        const q3 = sorted[q3Index];
+        const iqr = q3 - q1;
+
+        const lowerFence = q1 - (threshold * iqr);
+        const upperFence = q3 + (threshold * iqr);
+
+        return values.map((value, index) => {
+            if (value < lowerFence || value > upperFence) {
+                return index;
+            }
+            return -1;
+        }).filter(index => index !== -1);
+    }
+
+    removeOutliers(values) {
+        const outlierIndices = this.identifyOutliersIQR(values);
+        return values.filter((_, index) => !outlierIndices.includes(index));
+    }
 }
 
 module.exports = new Statistics();

@@ -27,10 +27,11 @@ const config = {
         'apiResponse',
         'memoryUsage'
     ],
-    testIterations: 3,
+    testIterations: 2,
+    warmupIterations: 1,
     reportDir: './reports',
     headless: false,
-    screenshots: true,
+    screenshots: false,
     screenshotDir: './screenshots',
     timeout: 30000,
     serverCheckTimeout: 5000,
