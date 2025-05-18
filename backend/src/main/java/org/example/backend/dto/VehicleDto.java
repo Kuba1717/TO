@@ -1,6 +1,10 @@
 package org.example.backend.dto;
 
 import lombok.Data;
+import org.example.backend.model.VehicleImage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class VehicleDto {
@@ -15,7 +19,7 @@ public class VehicleDto {
     private String condition;
     private int power;
     private int mileage;
-    //private String photo;
+    private List<VehicleImageDto> images = new ArrayList<>();
     private Long modelId;
     private Long typeId;
 }

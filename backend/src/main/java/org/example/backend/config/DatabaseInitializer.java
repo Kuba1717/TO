@@ -48,6 +48,23 @@ public class DatabaseInitializer {
 
                 userRepository.save(admin);
             }
+
+
+            if (Boolean.FALSE.equals(userRepository.existsByEmail("1@1.pl"))) {
+                User client = new User();
+                client.setUsername("123");
+                client.setEmail("1@1.pl");
+                client.setPassword(passwordEncoder.encode("123456"));
+
+                Role clientRole = roleRepository.findByName(RoleName.CLIENT)
+                        .orElseThrow(() -> new RuntimeException("Error: CLIENT Role not found."));
+
+                Set<Role> roles = new HashSet<>();
+                roles.add(clientRole);
+                client.setRoles(roles);
+
+                userRepository.save(client);
+            }
         };
     }
 }
