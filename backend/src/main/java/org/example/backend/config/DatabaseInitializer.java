@@ -33,11 +33,15 @@ public class DatabaseInitializer {
                 }
             }
 
-            if (Boolean.FALSE.equals(userRepository.existsByEmail("admin@example.com"))) {
+            if (Boolean.FALSE.equals(userRepository.existsByEmail("1"))) {
                 User admin = new User();
-                admin.setUsername("admin");
-                admin.setEmail("admin@example.com");
-                admin.setPassword(passwordEncoder.encode("admin"));
+                admin.setUsername("1");
+                admin.setEmail("1");
+                admin.setPassword(passwordEncoder.encode("1"));
+                admin.setFirstName("Andrzej");
+                admin.setLastName("Nowak");
+                admin.setPhoneNumber("645 332 723");
+                admin.setEmail("andrzejnowak@gmail.com");
 
                 Role adminRole = roleRepository.findByName(RoleName.ADMIN)
                         .orElseThrow(() -> new RuntimeException("Error: Admin Role not found."));

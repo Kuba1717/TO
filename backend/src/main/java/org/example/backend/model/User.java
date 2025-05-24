@@ -25,6 +25,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String phoneNumber;
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "user_roles",

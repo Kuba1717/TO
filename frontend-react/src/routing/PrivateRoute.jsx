@@ -13,7 +13,7 @@ function PrivateRoute({requiredRole }) {
     }
 
     if (requiredRole && !hasRole(requiredRole)){
-        return <Navigate to="/home" replace />;
+        return <Navigate to="/main" replace />;
     }
 
 

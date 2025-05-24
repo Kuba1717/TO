@@ -10,7 +10,7 @@ function PublicRoute() {
     }
 
     if (isAuthenticated) {
-        return <Navigate to="/home" replace />;
+        return <Navigate to="/main" replace />;
     }
 
     return <Outlet />;
