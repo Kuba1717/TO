@@ -33,8 +33,13 @@ class HtmlReporter {
           .vue-win { background-color: #d1ecf1; }
           .tie { background-color: #fff3cd; }
           .chart-container { height: 400px; margin-bottom: 40px; }
+          .box-plot-container { height: 400px; margin-bottom: 40px; }
+          .framework-label { font-weight: bold; margin-bottom: 5px; text-align: center; }
+          .box-plots-wrapper { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 30px; }
+          .box-plot-wrapper { flex: 1; min-width: 350px; }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4.2.4/build/index.umd.min.js"></script>
       </head>
       <body>
         <h1>React vs Vue Performance Report</h1>
@@ -46,9 +51,13 @@ class HtmlReporter {
         <h2>Detailed Results</h2>
         ${this.generateDetailedResults(results)}
         
+        <h2>Box Plot Analysis</h2>
+        ${this.generateBoxPlotContainers(results)}
+        
         <script>
           window.addEventListener('load', function() {
             ${this.generateChartCode(results)}
+            ${this.generateBoxPlotCode(results)}
           });
         </script>
       </body>
@@ -187,6 +196,51 @@ class HtmlReporter {
         return html;
     }
 
+    generateBoxPlotContainers(results) {
+        let html = '';
+        const metrics = ['loadTime', 'renderTime', 'memoryUsage'];
+
+        for (const routePath in results.react) {
+            if (!results.vue[routePath]) continue;
+
+            html += `<h3>Distribution Analysis for Route: ${routePath}</h3>`;
+
+            for (const metric of metrics) {
+                const reactMetric = results.react[routePath]?.[metric];
+                const vueMetric = results.vue[routePath]?.[metric];
+
+                if (!reactMetric || !vueMetric ||
+                    !reactMetric.originalValues || !vueMetric.originalValues ||
+                    reactMetric.originalValues.length === 0 || vueMetric.originalValues.length === 0) {
+                    continue;
+                }
+
+                html += `<h4>${this.formatMetricName(metric)} Distribution</h4>`;
+
+                const reactBoxPlotId = `boxplot-react-${metric}-${this.sanitizeId(routePath)}`;
+                const vueBoxPlotId = `boxplot-vue-${metric}-${this.sanitizeId(routePath)}`;
+
+                html += `
+                <div class="box-plots-wrapper">
+                    <div class="box-plot-wrapper">
+                        <div class="framework-label">React</div>
+                        <div class="box-plot-container">
+                            <canvas id="${reactBoxPlotId}"></canvas>
+                        </div>
+                    </div>
+                    <div class="box-plot-wrapper">
+                        <div class="framework-label">Vue</div>
+                        <div class="box-plot-container">
+                            <canvas id="${vueBoxPlotId}"></canvas>
+                        </div>
+                    </div>
+                </div>`;
+            }
+        }
+
+        return html;
+    }
+
     generateChartCode(results) {
         let code = '';
 
@@ -281,6 +335,132 @@ class HtmlReporter {
         return code;
     }
 
+    generateBoxPlotCode(results) {
+        let code = '';
+        const metrics = ['loadTime', 'renderTime', 'memoryUsage'];
+
+        for (const routePath in results.react) {
+            if (!results.vue[routePath]) continue;
+
+            for (const metric of metrics) {
+                const reactMetric = results.react[routePath]?.[metric];
+                const vueMetric = results.vue[routePath]?.[metric];
+
+                if (!reactMetric || !vueMetric ||
+                    !reactMetric.originalValues || !vueMetric.originalValues ||
+                    reactMetric.originalValues.length === 0 || vueMetric.originalValues.length === 0) {
+                    continue;
+                }
+
+                const reactBoxPlotId = `boxplot-react-${metric}-${this.sanitizeId(routePath)}`;
+                const vueBoxPlotId = `boxplot-vue-${metric}-${this.sanitizeId(routePath)}`;
+                const unit = metric === 'memoryUsage' ? 'bytes' : 'ms';
+
+                const reactValues = reactMetric.originalValues;
+                const vueValues = vueMetric.originalValues;
+
+                // Calculate React min/max with 5% padding
+                const reactMin = Math.min(...reactValues);
+                const reactMax = Math.max(...reactValues);
+                const reactRange = Math.max(reactMax - reactMin, 1);
+                const reactPadding = reactRange * 0.05;
+                const reactMinValue = Math.floor(reactMin - reactPadding);
+                const reactMaxValue = Math.ceil(reactMax + reactPadding);
+
+                // Calculate Vue min/max with 5% padding
+                const vueMin = Math.min(...vueValues);
+                const vueMax = Math.max(...vueValues);
+                const vueRange = Math.max(vueMax - vueMin, 1);
+                const vuePadding = vueRange * 0.05;
+                const vueMinValue = Math.floor(vueMin - vuePadding);
+                const vueMaxValue = Math.ceil(vueMax + vuePadding);
+
+                code += `
+            new Chart(document.getElementById('${reactBoxPlotId}'), {
+                type: 'boxplot',
+                data: {
+                    labels: ['Distribution'],
+                    datasets: [{
+                        backgroundColor: 'rgba(97, 218, 251, 0.5)',
+                        borderColor: 'rgba(97, 218, 251, 1)',
+                        borderWidth: 1,
+                        outlierColor: '#999999',
+                        padding: 10,
+                        itemRadius: 2,
+                        data: [${JSON.stringify(reactValues)}]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: ${reactMinValue >= 0 ? 'true' : 'false'},
+                            min: ${reactMinValue},
+                            max: ${reactMaxValue},
+                            title: {
+                                display: true,
+                                text: '${this.formatMetricName(metric)} (${unit})'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '${routePath}'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            new Chart(document.getElementById('${vueBoxPlotId}'), {
+                type: 'boxplot',
+                data: {
+                    labels: ['Distribution'],
+                    datasets: [{
+                        backgroundColor: 'rgba(66, 184, 131, 0.5)',
+                        borderColor: 'rgba(66, 184, 131, 1)',
+                        borderWidth: 1,
+                        outlierColor: '#999999',
+                        padding: 10,
+                        itemRadius: 2,
+                        data: [${JSON.stringify(vueValues)}]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: ${vueMinValue >= 0 ? 'true' : 'false'},
+                            min: ${vueMinValue},
+                            max: ${vueMaxValue},
+                            title: {
+                                display: true,
+                                text: '${this.formatMetricName(metric)} (${unit})'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '${routePath}'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });`;
+            }
+        }
+
+        return code;
+    }
+
     formatValue(value, unit) {
         if (value === undefined || value === null) {
             return "N/A";
@@ -298,7 +478,6 @@ class HtmlReporter {
             return `${value.toFixed(2)} ${unit}`;
         }
     }
-
 
     formatMetricName(name) {
         return name

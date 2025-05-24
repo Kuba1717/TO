@@ -28,6 +28,42 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/book',
+        name: 'Book',
+        component: () => import('../pages/Book/Book.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/offer',
+        name: 'Offer',
+        component: () => import('../pages/Offer/Offer.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('../pages/Profile/Profile.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/history',
+        name: 'History',
+        component: () => import('../pages/History/History.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/success',
+        name: 'Success',
+        component: () => import('../pages/Success/Success.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/addOffer',
+        name: 'AddOffer',
+        component: () => import('../pages/AddOffer/AddOffer.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/unauthorized',
         name: 'Unauthorized',
         component: () => import('../components/Router/Unauthorized.vue'),

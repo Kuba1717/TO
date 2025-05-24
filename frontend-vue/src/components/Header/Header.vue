@@ -2,8 +2,8 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../store/auth';
+import VueFeather from 'vue-feather';
 import './Header.css'
-
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -44,14 +44,14 @@ const handleProfileClick = () => {
           @click="handleProfileClick"
           aria-label="Profile"
       >
-        <i class="fi fi-user button-icon"></i>
+        <vue-feather type="user" class="button-icon" size="24"></vue-feather>
       </button>
       <button
           class="icon-button logout-button"
           @click="handleLogout"
           aria-label="Logout"
       >
-        <i class="fi fi-log-out button-icon"></i>
+        <vue-feather type="log-out" class="button-icon" size="24"></vue-feather>
       </button>
     </div>
     <div v-else class="header-nav-buttons">
@@ -70,4 +70,3 @@ const handleProfileClick = () => {
     </div>
   </header>
 </template>
-

@@ -1,13 +1,17 @@
 package org.example.backend.mapper;
 
 import org.example.backend.dto.VehicleDto;
+import org.example.backend.dto.VehicleImageDto;
 import org.example.backend.model.Model;
 import org.example.backend.model.Type;
 import org.example.backend.model.Vehicle;
+import org.example.backend.model.VehicleImage;
 import org.example.backend.repository.MarkRepository;
 import org.example.backend.repository.ModelRepository;
 import org.example.backend.repository.TypeRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class VehicleMapper {
@@ -37,7 +41,11 @@ public class VehicleMapper {
         dto.setCondition(vehicle.getCondition2());
         dto.setPower(vehicle.getPower());
         dto.setMileage(vehicle.getMileage());
-        //photo
+        if (vehicle.getImages() != null) {
+            dto.setImages(vehicle.getImages().stream()
+                    .map(this::mapImageToDto)
+                    .toList());
+        }
 
         if (vehicle.getModel() != null) {
             dto.setModelId(vehicle.getModel().getId());
@@ -66,7 +74,7 @@ public class VehicleMapper {
         vehicle.setCondition2(dto.getCondition());
         vehicle.setPower(dto.getPower());
         vehicle.setMileage(dto.getMileage());
-        //photo
+
         if (dto.getModelId() != null) {
             Model model = modelRepository.findById(dto.getModelId()).orElse(null);
             if (model != null) {
@@ -95,7 +103,6 @@ public class VehicleMapper {
         vehicle.setCondition2(dto.getCondition());
         vehicle.setPower(dto.getPower());
         vehicle.setMileage(dto.getMileage());
-        //photo
         if (dto.getModelId() != null) {
             Model model = modelRepository.findById(dto.getModelId()).orElse(null);
             if (model != null) {
@@ -108,5 +115,25 @@ public class VehicleMapper {
                 vehicle.setType(type);
             }
         }
+
+
+
+    }
+
+    private VehicleImageDto mapImageToDto(VehicleImage image) {
+        if (image == null) {
+            return null;
+        }
+        VehicleImageDto dto = new VehicleImageDto();
+        dto.setId(image.getId());
+        dto.setFileName(image.getFileName());
+        dto.setFileType(image.getFileType());
+        dto.setFilePath(image.getFilePath());
+        dto.setFileUrl(image.getFileUrl());
+
+        if (image.getVehicle() != null) {
+            dto.setVehicleId(image.getVehicle().getId());
+        }
+        return dto;
     }
 }

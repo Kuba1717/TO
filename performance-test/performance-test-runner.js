@@ -123,6 +123,25 @@ class PerformanceTestRunner {
             renderTime: { values: [] },
             memoryUsage: { values: [] }
         };
+        const warmupIterations = config.warmupIterations;
+        console.log(`    Performing ${warmupIterations} warm-up iterations...`);
+        for (let i = 0; i < warmupIterations; i++) {
+            const page = await this.browser.newPage();
+            try {
+                await page.setViewport({ width: 1920, height: 1080 });
+                await page.setCacheEnabled(false);
+
+                await loadTimeMetric.measure(page, url);
+                await renderTimeMetric.measure(page, url);
+                await memoryUsageMetric.measure(page, url);
+
+                console.log(`      Warm-up iteration ${i + 1}/${warmupIterations} completed`);
+            } catch (error) {
+                console.error(`Error during warm-up for ${appType} - ${route.path}:`, error.message);
+            } finally {
+                await page.close();
+            }
+        }
 
         for (let i = 0; i < config.testIterations; i++) {
             console.log(`    Iteration ${i + 1}/${config.testIterations}`);
@@ -162,9 +181,17 @@ class PerformanceTestRunner {
 
         for (const metric in routeResults) {
             if (routeResults[metric].values.length > 0) {
+                const originalValues = [...routeResults[metric].values];
+                const cleanedValues = statistics.removeOutliers(originalValues);
+
+                const outlierIndices = statistics.identifyOutliersIQR(originalValues);
+                const outliers = outlierIndices.map(idx => originalValues[idx]);
+
                 routeResults[metric] = {
-                    ...routeResults[metric],
-                    ...statistics.summarize(routeResults[metric].values)
+                    originalValues,
+                    values: cleanedValues,
+                    outliers,
+                    ...statistics.summarize(cleanedValues)
                 };
             }
         }
