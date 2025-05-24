@@ -37,7 +37,7 @@ public class DatabaseInitializer {
             if (Boolean.FALSE.equals(userRepository.existsByEmail("1"))) {
                 admin = new User();
                 admin.setUsername("1");
-                admin.setEmail("1");
+                admin.setEmail("1@1.pl");
                 admin.setPassword(passwordEncoder.encode("1"));
                 admin.setFirstName("Andrzej");
                 admin.setLastName("Nowak");
@@ -59,7 +59,7 @@ public class DatabaseInitializer {
             User client = null;
             if (Boolean.FALSE.equals(userRepository.existsByEmail("1@1.pl"))) {
                 client = new User();
-                client.setUsername("123");
+                client.setUsername("2");
                 client.setEmail("1@1.pl");
                 client.setPassword(passwordEncoder.encode("123456"));
 
