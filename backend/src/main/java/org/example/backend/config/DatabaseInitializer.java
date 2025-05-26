@@ -9,10 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Configuration
 public class DatabaseInitializer {
+
+    private static final List<String> IMAGE_URLS = List.of(
+            "https://www.bmw.pl/content/dam/bmw/common/all-models/m-series/series-overview/bmw-m-series-seo-overview-ms-04.jpg",
+            "https://b-cache.pl/video/modele/bmw1_2024/styl_1_charakter.jpg",
+            "https://www.bmw-smorawinski.pl/www/media/mediapool/m3m4/oferr_25_m4coupe_WBS41AZ090CP87271_585x329.jpg",
+            "https://kvdbil-object-images.imgix.net/7242577/db05ab55.jpg",
+            "https://a.allegroimg.com/original/11e5bd/bc9555db41478ee2a0d73b618076/BMW-X2-F39-xDrive-20-d-190-KM-FULL-OPCJA",
+            "https://bmw-uzywane.com.pl/assets/photo/upload/cars/33140/vehicle_8743f-scale-1200-0.jpg"
+    );
 
     @Bean
     @Transactional
@@ -23,7 +33,10 @@ public class DatabaseInitializer {
             MarkRepository markRepository,
             ModelRepository modelRepository,
             TypeRepository typeRepository,
-            VehicleRepository vehicleRepository) {
+            VehicleRepository vehicleRepository,
+            AnnouncementRepository announcementRepository,
+            VehicleImageRepository vehicleImageRepository
+            ) {
         return args -> {
             for (RoleName roleName : RoleName.values()) {
                 if (roleRepository.findByName(roleName).isEmpty()) {
@@ -97,6 +110,17 @@ public class DatabaseInitializer {
                 List<Vehicle> vehicles = createVehicles(models, types);
                 vehicleRepository.saveAll(vehicles);
             }
+            if (announcementRepository.count() == 0) {
+                List<Vehicle> vehicles = vehicleRepository.findAll();
+                List<Announcement> announcements = createAnnouncements(vehicles);
+                announcementRepository.saveAll(announcements);
+            }
+            if (vehicleImageRepository.count() == 0) {
+                List<Vehicle> vehicles = vehicleRepository.findAll();
+                List<VehicleImage> images = createVehicleImages(vehicles);
+                vehicleImageRepository.saveAll(images);
+            }
+
         };
     }
 
@@ -183,4 +207,56 @@ public class DatabaseInitializer {
 
         return vehicles;
     }
+
+
+    private List<Announcement> createAnnouncements(List<Vehicle> vehicles) {
+        List<Announcement> announcements = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < Math.min(vehicles.size(), 10); i++) {
+            Vehicle vehicle = vehicles.get(i);
+
+            Announcement announcement = new Announcement();
+            announcement.setName("Ogłoszenie #" + (i + 1));
+            announcement.setStatus("ACTIVE");
+            announcement.setPlacedDate(LocalDateTime.now().minusDays(random.nextInt(30)));
+            announcement.setLocation("Warszawa");
+            announcement.setDescription("Opis pojazdu " + vehicle.getModel().getName());
+            announcement.setPrice((double) (20000 + random.nextInt(50000)));
+            announcement.setVehicle(vehicle);
+
+            announcements.add(announcement);
+        }
+
+        return announcements;
+    }
+
+    private List<VehicleImage> createVehicleImages(List<Vehicle> vehicles) {
+        List<VehicleImage> images = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < vehicles.size(); i++) {
+            Vehicle vehicle = vehicles.get(i);
+            int offset = i % IMAGE_URLS.size();
+
+            int imageCount = 2 + random.nextInt(3);
+
+            for (int j = 0; j < imageCount; j++) {
+                String imageUrl = IMAGE_URLS.get((offset + j) % IMAGE_URLS.size());
+
+                VehicleImage image = new VehicleImage();
+                image.setFileName("image_" + i + "_" + j + ".jpg");
+                image.setFileType("image/jpeg");
+                image.setFilePath("/randompath/image_" + i + "_" + j + ".jpg");
+                image.setFileUrl(imageUrl);
+                image.setVehicle(vehicle);
+
+                images.add(image);
+            }
+        }
+
+        return images;
+    }
+
+
 }

@@ -48,7 +48,7 @@ function Profile() {
             setIsEditing(true);
         } else {
             try {
-                await api.put(`/user/${user.email}`, formData); // PUT z e-mailem
+                await api.put(`/user/${user.email}`, formData);
                 setProfileData(prev => ({ ...prev, ...formData }));
                 setIsEditing(false);
             } catch (err) {

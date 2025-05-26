@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import org.example.backend.dto.VehicleDto;
+import org.example.backend.dto.VehicleImageDto;
 import org.example.backend.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,5 +77,29 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    @GetMapping(value = "/images/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getVehicleImage(@PathVariable Long imageId) {
+        try {
+            byte[] imageData = vehicleService.getImage(imageId);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageData);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{vehicleId}/images")
+    public ResponseEntity<List<VehicleImageDto>> getVehicleImages(@PathVariable Long vehicleId) {
+        try {
+            List<VehicleImageDto> images = vehicleService.getImagesByVehicleId(vehicleId);
+            return ResponseEntity.ok(images);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

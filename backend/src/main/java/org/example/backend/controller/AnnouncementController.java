@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import org.example.backend.dto.AnnouncementDto;
+import org.example.backend.dto.AnnouncementWithImageDto;
 import org.example.backend.service.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,17 @@ public class AnnouncementController {
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id) {
         announcementService.deleteAnnouncement(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/with-images")
+    public ResponseEntity<List<AnnouncementWithImageDto>> getAllAnnouncementsWithImages() {
+        List<AnnouncementWithImageDto> announcements = announcementService.getAnnouncementsWithImages();
+        return ResponseEntity.ok(announcements);
+    }
+
+    @GetMapping("/with-images/{id}")
+    public ResponseEntity<AnnouncementWithImageDto> getAnnouncementWithImagesById(@PathVariable Long id) {
+        AnnouncementWithImageDto announcement = announcementService.getAnnouncementWithImagesById(id);
+        return announcement != null ? ResponseEntity.ok(announcement) : ResponseEntity.notFound().build();
     }
 }

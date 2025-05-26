@@ -1,6 +1,7 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.VehicleDto;
+import org.example.backend.dto.VehicleImageDto;
 import org.example.backend.mapper.VehicleMapper;
 import org.example.backend.model.Model;
 import org.example.backend.model.Type;
@@ -111,4 +112,33 @@ public class VehicleServiceImpl implements VehicleService{
 
         return vehicleMapper.toDto(vehicle);
     }
+
+    @Override
+    public byte[] getImage(Long imageId) throws IOException {
+        VehicleImage image = vehicleImageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+        return fileStorageService.loadFileAsBytes(image.getFilePath());
+    }
+
+    @Override
+    public List<VehicleImageDto> getImagesByVehicleId(Long vehicleId) {
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+
+        List<VehicleImageDto> imageDtos = new ArrayList<>();
+
+        for (VehicleImage image : vehicle.getImages()) {
+            VehicleImageDto dto = new VehicleImageDto();
+            dto.setId(image.getId());
+            dto.setFileName(image.getFileName());
+            dto.setFileType(image.getFileType());
+            dto.setFilePath(image.getFilePath());
+            dto.setFileUrl("/vehicle/images/" + image.getId());
+            dto.setVehicleId(vehicle.getId());
+            imageDtos.add(dto);
+        }
+
+        return imageDtos;
+    }
+
 }

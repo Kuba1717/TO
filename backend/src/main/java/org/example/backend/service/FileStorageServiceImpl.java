@@ -66,4 +66,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     public Path getFilePath(String fileName, String directory) {
         return Paths.get(uploadDir, directory, fileName);
     }
+
+
+    public byte[] loadFileAsBytes(String filePath) throws IOException {
+        return java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(filePath));
+    }
 }

@@ -9,4 +9,5 @@ public interface FileStorageService {
     VehicleImage storeFile(MultipartFile file, String directory) throws IOException;
     void deleteFile(String filePath) throws IOException;
     Path getFilePath(String fileName, String directory);
+    byte[] loadFileAsBytes(String filePath) throws IOException;
 }
