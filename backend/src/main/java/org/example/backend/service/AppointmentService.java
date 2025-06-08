@@ -10,4 +10,5 @@ public interface AppointmentService {
     AppointmentDto createAppointment(AppointmentDto appointmentDto);
     AppointmentDto updateAppointment(Long id, AppointmentDto appointmentDto);
     void deleteAppointment(Long id);
+    List<AppointmentDto> getAppointmentsByEmail(String email);
 }

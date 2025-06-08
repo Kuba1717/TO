@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import './Header.css';
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser, FiClock } from "react-icons/fi";
 
 const Header = () => {
     const { user, isAuthenticated, logout } = useAuth();
@@ -29,6 +29,10 @@ const Header = () => {
         navigate('/profile');
     };
 
+    const handleHistoryClick = () => {
+        navigate('/history');
+    };
+
     return (
         <header className="header">
             <h1 onClick={handleMainClick} className="header-title">AUTO KOMIS</h1>
@@ -41,14 +45,21 @@ const Header = () => {
                         onClick={handleProfileClick}
                         aria-label="Profile"
                     >
-                        <FiUser className="button-icon" />
+                        <FiUser className="button-icon"/>
+                    </button>
+                    <button
+                        className="icon-button history-button"
+                        onClick={handleHistoryClick}
+                        aria-label="History"
+                    >
+                        <FiClock className="button-icon"/>
                     </button>
                     <button
                         className="icon-button logout-button"
                         onClick={handleLogout}
                         aria-label="Logout"
                     >
-                        <FiLogOut className="button-icon" />
+                        <FiLogOut className="button-icon"/>
                     </button>
                 </div>
             ) : (

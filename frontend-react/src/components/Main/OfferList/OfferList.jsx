@@ -44,7 +44,6 @@ const OfferList = ({ filters, marks, models, types }) => {
                 (!filters.model || modelName.toLowerCase().includes(filters.model.toLowerCase())) &&
                 (!filters.type || typeName.toLowerCase().includes(filters.type.toLowerCase())) &&
                 (!filters.productionYear || v.productionYear <= filters.productionYear) &&
-                (!filters.registrationNumber || v.registrationNumber?.toLowerCase().includes(filters.registrationNumber.toLowerCase())) &&
                 (!filters.colour || v.colour?.toLowerCase().includes(filters.colour.toLowerCase())) &&
                 (!filters.fuelType || v.fuelType?.toLowerCase().includes(filters.fuelType.toLowerCase())) &&
                 (!filters.engineCapacity || v.engineCapacity <= filters.engineCapacity) &&

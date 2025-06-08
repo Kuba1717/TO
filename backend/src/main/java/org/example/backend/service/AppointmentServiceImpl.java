@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService{
@@ -69,4 +70,16 @@ public class AppointmentServiceImpl implements AppointmentService{
     public void deleteAppointment(Long id) {
         appointmentRepository.deleteById(id);
     }
+
+    public List<AppointmentDto> getAppointmentsByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Appointment> appointments = appointmentRepository.findAllByUserId(user.getId());
+
+        return appointments.stream()
+                .map(appointmentMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

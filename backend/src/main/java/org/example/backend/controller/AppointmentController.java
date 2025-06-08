@@ -45,4 +45,9 @@ public class AppointmentController {
         appointmentService.deleteAppointment(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/user/{email}")
+    public List<AppointmentDto> getAppointmentsByEmail(@PathVariable String email) {
+        return appointmentService.getAppointmentsByEmail(email);
+    }
 }
