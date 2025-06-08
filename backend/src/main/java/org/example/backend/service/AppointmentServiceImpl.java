@@ -3,8 +3,12 @@ package org.example.backend.service;
 import org.example.backend.dto.AppointmentDto;
 import org.example.backend.mapper.AppointmentMapper;
 import org.example.backend.model.Appointment;
+import org.example.backend.model.User;
 import org.example.backend.repository.AppointmentRepository;
+import org.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +19,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AppointmentMapper appointmentMapper;
@@ -37,7 +44,15 @@ public class AppointmentServiceImpl implements AppointmentService{
         if (appointmentDto.getId() != null && appointmentRepository.existsById(appointmentDto.getId())) {
             return null;
         }
+
         Appointment appointment = appointmentMapper.toEntity(appointmentDto);
+
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika"));
+
+        appointment.setUser(user);
+
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toDto(savedAppointment);
     }

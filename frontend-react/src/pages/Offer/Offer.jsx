@@ -7,11 +7,13 @@ import { LuWalletMinimal } from "react-icons/lu";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 import { PiMagnifyingGlassBold } from "react-icons/pi";
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function Offer() {
     const { id } = useParams();
     const { api } = useAuth();
     const [offer, setOffer] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOffer = async () => {
@@ -64,8 +66,11 @@ function Offer() {
                         {offer.price ? `${offer.price.toLocaleString()} PLN` : 'Cena nie podana'}
                     </p>
 
-                    <div className="offer-buy-button">
+                    <div className="offer-buy-button"
+                         onClick={() => navigate(`/book/${offer.id}`)}
+                    >
                         <LuWalletMinimal className="buy-icon"/>
+
                     </div>
                     <div className="offer-contact-button">
                         <HiDevicePhoneMobile className="contact-icon"/>

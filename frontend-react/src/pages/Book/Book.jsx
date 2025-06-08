@@ -1,69 +1,134 @@
-import React from 'react';
-import './Book.css'
-import Header from "../../components/Header/Header.jsx";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import './Book.css';
+import Header from '../../components/Header/Header.jsx';
 import { Checkbox } from 'antd';
 import dayjs from 'dayjs';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function Book() {
+    const { id } = useParams();
+    const { user, api } = useAuth();
+    const [offer, setOffer] = useState(null);
+    const navigate = useNavigate();
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+
+    const availableDates = [
+        dayjs().startOf('day'),
+        dayjs().add(1, 'day').startOf('day'),
+        dayjs().add(2, 'day').startOf('day')
+    ];
+
+    const availableTimes = ['16:00', '17:00', '18:00'];
+
+    const handleConfirm = async () => {
+        if (!selectedDate || !selectedTime) {
+            alert("Wybierz datę i godzinę.");
+            return;
+        }
+
+        const [hour, minute] = selectedTime.split(':');
+        const appointmentDate = selectedDate.hour(Number(hour)).minute(Number(minute));
+
+        try {
+            await api.post("/appointment", {
+                name: "Jazda próbna",
+                status: "created",
+                appointmentDate: appointmentDate.toISOString(),
+                announcementId: offer.id
+            });
+
+            navigate(`/success/${offer.id}`, {
+                state: {
+                    appointmentDate: appointmentDate.format("DD.MM.YYYY [godz.] HH:mm")
+                }
+            });
+        } catch (error) {
+            console.error("Błąd podczas umawiania wizyty", error);
+            alert("Nie udało się umówić wizyty.");
+        }
+
+    };
+
+    useEffect(() => {
+        const fetchOffer = async () => {
+            try {
+                const response = await api.get(`/announcement/with-images/${id}`);
+                setOffer(response.data);
+            } catch (err) {
+                console.error('Błąd pobierania oferty:', err);
+            }
+        };
+
+        fetchOffer();
+    }, [api, id]);
+
+    if (!offer) return <div>Ładowanie danych oferty...</div>;
 
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="book-page-container">
                 <div className="book-container">
                     <p className="book-title">Umów się na jazdę próbną...</p>
 
-
                     <div className="book-offer-card">
                         <div className="book-offer-horizontal-container">
-                            <img src="" alt=""/>
+                            <img src={offer.imageUrls?.[0]} alt="Zdjęcie pojazdu" />
                             <div className="book-offer-vertical-container">
-                                <h3 className="book-offer-title">Tytuł oferty</h3>
+                                <h3 className="book-offer-title">{offer.name}</h3>
                                 <p className="book-offer-location">
-                                    Warszawa, Ursynów – 05 marca 2025<br/>
-                                    2018 – 188 000 km
+                                    {offer.vehicle?.productionYear} – {offer.vehicle?.mileage?.toLocaleString()} km
                                 </p>
                             </div>
-                            <p className="book-offer-price">61 900 PLN</p>
+                            <p className="book-offer-price">
+                                {offer.price?.toLocaleString()} PLN
+                            </p>
                         </div>
                     </div>
+
                     <div className="book-date-horizontal-container">
                         <div>
-                            <p className="book-text">
-                                Data:
-                            </p>
+                            <p className="book-text">Data:</p>
                             <div className="book-checkbox-vertical-container">
-
-                                <Checkbox className="book-checkbox">{dayjs().format('DD MMMM YYYY')}</Checkbox>;
-                                <Checkbox
-                                    className="book-checkbox">{dayjs().add(1, 'day').format('DD MMMM YYYY')}</Checkbox>;
-                                <Checkbox
-                                    className="book-checkbox">{dayjs().add(2, 'day').format('DD MMMM YYYY')}</Checkbox>;
+                                {availableDates.map(date => (
+                                    <Checkbox
+                                        key={date.format('YYYY-MM-DD')}
+                                        className="book-checkbox"
+                                        checked={selectedDate?.isSame(date, 'day')}
+                                        onChange={() => setSelectedDate(date)}
+                                    >
+                                        {date.format('DD MMMM YYYY')}
+                                    </Checkbox>
+                                ))}
                             </div>
-
                         </div>
+
                         <div>
-
-                            <p className="book-text">
-                                Godzina:
-                            </p>
+                            <p className="book-text">Godzina:</p>
                             <div className="book-checkbox-vertical-container">
-                                <Checkbox className="book-checkbox">16:00 - 16:45</Checkbox>;
-                                <Checkbox className="book-checkbox">17:00 - 17:45</Checkbox>;
-                                <Checkbox className="book-checkbox">18:00 - 18:45</Checkbox>;
-
+                                {availableTimes.map(time => (
+                                    <Checkbox
+                                        key={time}
+                                        className="book-checkbox"
+                                        checked={selectedTime === time}
+                                        onChange={() => setSelectedTime(time)}
+                                    >
+                                        {time} - {dayjs(time, 'HH:mm').add(45, 'minute').format('HH:mm')}
+                                    </Checkbox>
+                                ))}
                             </div>
                         </div>
-
                     </div>
 
-                    <button className="book-confirm-button">
+                    <button className="book-confirm-button" onClick={handleConfirm}>
                         Potwierdzam
                     </button>
                 </div>
             </div>
-
-
         </div>
     );
 }

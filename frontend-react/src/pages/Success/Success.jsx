@@ -1,33 +1,37 @@
 import React from 'react';
-import './Success.css'
+import './Success.css';
 import Header from "../../components/Header/Header.jsx";
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
 function Success() {
+    const { id } = useParams();
+    const { state } = useLocation();
+    const navigate = useNavigate();
 
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="success-page-container">
                 <div className="success-container">
                     <p className="success-title">
                         Sukces!
                     </p>
                     <p className="success-text">
-                        Udało Ci się złożyć zamówienie. <br/>
-                        Twoje auto będzie gotowe: <br/>
-                        17.03.2025 godz 18:45.
+                        Udało Ci się umówić jazdę próbną<br/>
+                        Termin: <br/><br/>
+                        {state?.appointmentDate || "brak danych"}
                     </p>
                     <p className="success-thanks-text">
-                        Dziękujemy za zakupy!
+                        Dziękujemy za skorzystanie z naszych usług!
                     </p>
-                    <button className="success-button">
+                    <button
+                        className="success-button"
+                        onClick={() => navigate('/main')}
+                    >
                         OK
                     </button>
-
                 </div>
             </div>
-
-
         </div>
     );
 }

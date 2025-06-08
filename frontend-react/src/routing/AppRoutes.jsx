@@ -28,10 +28,10 @@ function AppRoutes() {
                         <Route path="/home" element={<Home />} />
                         <Route path="/main" element={<Main />} />
                         <Route path="/offer/:id" element={<Offer />} />
-                        <Route path="/book" element={<Book />} />
+                        <Route path="/book/:id" element={<Book />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/history" element={<History />} />
-                        <Route path="/success" element={<Success />} />
+                        <Route path="/success/:id" element={<Success />} />
                         <Route path="/addOffer" element={<AddOffer />} />
                     </Route>
 
