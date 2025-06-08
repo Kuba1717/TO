@@ -26,7 +26,6 @@ function AppRoutes() {
 
                     <Route element={<PrivateRoute />}>
                         <Route path="/home" element={<Home />} />
-                        <Route path="/main" element={<Main />} />
                         <Route path="/offer/:id" element={<Offer />} />
                         <Route path="/book/:id" element={<Book />} />
                         <Route path="/profile" element={<Profile />} />
@@ -34,8 +33,8 @@ function AppRoutes() {
                         <Route path="/success/:id" element={<Success />} />
                         <Route path="/addOffer" element={<AddOffer />} />
                     </Route>
-
-                    <Route path="*" element={<Navigate to="/login" replace />} />
+                    <Route path="/main" element={<Main />} />
+                    <Route path="*" element={<Navigate to="/main" replace />} />
                 </Routes>
             </AuthProvider>
         </BrowserRouter>

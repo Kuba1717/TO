@@ -181,10 +181,10 @@ public class DatabaseInitializer {
     private List<Vehicle> createVehicles(List<Model> models, List<Type> types) {
         List<Vehicle> vehicles = new ArrayList<>();
         Random random = new Random();
-        String[] colors = {"Red", "Blue", "Black", "White", "Silver", "Gray", "Purple"};
-        String[] fuelTypes = {"Gasoline", "Diesel", "Electric", "Hybrid",  "LPG"};
+        String[] colors = {"Czerwony", "Niebieski", "Czarny", "Biały", "Srebrny", "Szary", "Fioletowy"};
+        String[] fuelTypes = {"Gaz", "Diesel", "Elektryczny", "Hybryda",  "Benzyna"};
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             Vehicle vehicle = new Vehicle();
 
             Model model = models.get(random.nextInt(models.size()));
@@ -192,15 +192,15 @@ public class DatabaseInitializer {
 
             vehicle.setModel(model);
             vehicle.setType(type);
-            vehicle.setProductionYear(2010 + random.nextInt(16));
+            vehicle.setProductionYear(2005 + random.nextInt(16));
             vehicle.setRegistrationNumber("REG" + (10000 + random.nextInt(90000)));
             vehicle.setColour(colors[random.nextInt(colors.length)]);
             vehicle.setVin("VIN" + (1000000 + random.nextInt(9000000)));
             vehicle.setFuelType(fuelTypes[random.nextInt(fuelTypes.length)]);
             vehicle.setEngineCapacity(1000 + random.nextInt(3000));
-            vehicle.setCondition2(random.nextBoolean() ? "New" : "Used");
+            vehicle.setCondition2(random.nextBoolean() ? "Nowy" : "Używany");
             vehicle.setPower(100 + random.nextInt(400));
-            vehicle.setMileage(random.nextInt(150000));
+            vehicle.setMileage(random.nextInt(250000));
 
             vehicles.add(vehicle);
         }
@@ -213,12 +213,12 @@ public class DatabaseInitializer {
         List<Announcement> announcements = new ArrayList<>();
         Random random = new Random();
 
-        for (int i = 0; i < Math.min(vehicles.size(), 10); i++) {
+        for (int i = 0; i < Math.min(vehicles.size(), 40); i++) {
             Vehicle vehicle = vehicles.get(i);
 
             Announcement announcement = new Announcement();
             announcement.setName("Ogłoszenie #" + (i + 1));
-            announcement.setStatus("ACTIVE");
+            announcement.setStatus("aktywny");
             announcement.setPlacedDate(LocalDateTime.now().minusDays(random.nextInt(30)));
             announcement.setLocation("Warszawa");
             announcement.setDescription("Opis pojazdu " + vehicle.getModel().getName());
