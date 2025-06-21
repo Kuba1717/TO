@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../store/auth'
 
 const routes = [
-    { path: '/', redirect: '/login', name: 'RootRedirect' },
+    { path: '/', redirect: '/main', name: 'RootRedirect' },
     {
         path: '/login',
         name: 'Login',
@@ -28,16 +28,16 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/book',
+        path: '/book/:id',
         name: 'Book',
         component: () => import('../pages/Book/Book.vue'),
         meta: { requiresAuth: true }
     },
     {
-        path: '/offer',
+        path: '/offer/:id',
         name: 'Offer',
         component: () => import('../pages/Offer/Offer.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: false }
     },
     {
         path: '/profile',
@@ -52,7 +52,7 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/success',
+        path: '/success/:id',
         name: 'Success',
         component: () => import('../pages/Success/Success.vue'),
         meta: { requiresAuth: true }
@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.guest && isAuthenticated) {
-        return next({ name: 'Home' })
+        return next({ name: 'Main' })
     }
 
     if (to.meta.roles && to.meta.roles.length > 0) {

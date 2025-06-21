@@ -1,0 +1,134 @@
+.book-page-container{
+    display: flex;
+    margin: 20px auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    max-height: 600px;
+    transition: transform 0.2s;
+}
+
+.book-title {
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.book-offer-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid #903CE9;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-width: 80%;
+    transition: transform 0.2s;
+}
+
+.book-offer-card img {
+    width: 150px;
+    height: auto;
+}
+
+.book-offer-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #333;
+
+}
+
+.book-offer-location {
+    font-size: 0.7rem;
+    color: #333;
+    margin-top: auto;
+
+}
+.book-offer-price {
+    color: #903CE9;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-left: auto;
+    margin-top: auto;
+}
+
+.book-offer-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.book-offer-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-text{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.book-date-text{
+    margin: 0;
+}
+
+.book-date-horizontal-container {
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+}
+.book-checkbox {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1rem;
+}
+
+.book-checkbox .ant-checkbox-inner{
+    border-color:#000000;
+}
+
+.book-checkbox:hover .ant-checkbox-inner,
+.book-checkbox .ant-checkbox-input:hover + .ant-checkbox-inner{
+    border-color:#000000 !important;
+}
+
+.book-checkbox .ant-checkbox-checked .ant-checkbox-inner{
+    background:#000000 !important;
+    border-color:#000000 !important;
+}
+
+.book-checkbox .ant-checkbox-checked .ant-checkbox-inner::after{
+    border-color:#ffffff !important;
+}
+
+.book-checkbox-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-confirm-button{
+    background-color: #903CE9;
+    border-radius: 20px;
+    max-width: 150px;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    margin-left:auto;
+}

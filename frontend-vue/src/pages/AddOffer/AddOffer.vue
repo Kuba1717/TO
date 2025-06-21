@@ -1,3 +1,9 @@
+<script setup>
+import Header from '../../components/Header/Header.vue'
+import VueFeather from 'vue-feather'
+import './AddOffer.css'
+</script>
+
 <template>
   <div>
     <Header />
@@ -47,10 +53,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import Header from '../../components/Header/Header.vue'
-import VueFeather from 'vue-feather'
-</script>
-
-<style src="./AddOffer.css"></style>

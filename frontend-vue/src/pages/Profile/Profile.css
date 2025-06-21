@@ -50,10 +50,10 @@
     margin-bottom: 0;
 }
 
-.profile-ok-button {
+.profile-edit-button {
     background: #903CE9;
     border-radius: 20px;
-    margin: 20px auto 0 auto;
+    margin: 40px auto 0 auto;
     font-family: 'Poppins', sans-serif;
     width: 50%;
     max-width: 300px;
@@ -65,4 +65,18 @@
 .id-icon {
     color: #903CE9;
     font-size: 4rem;
+}
+
+.profile-input {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 2px solid #000000;
+    margin: 10px auto;
+    width: 80%;
+    max-width: 500px;
+    font-size: 1rem;
+    padding: 15px;
+    color: #000000;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }

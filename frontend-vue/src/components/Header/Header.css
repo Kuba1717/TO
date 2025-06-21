@@ -20,6 +20,7 @@
 .header h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 2rem;
+    font-weight: 900;
 }
 
 .header-title {
@@ -96,6 +97,11 @@
 }
 
 .logout-button {
+    background-color: #fff;
+    color: #903CE9;
+}
+
+.history-button {
     background-color: #fff;
     color: #903CE9;
 }

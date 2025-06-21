@@ -1,29 +1,28 @@
+<script setup>
+import { useRoute, useRouter } from 'vue-router'
+import Header from '../../components/Header/Header.vue'
+import './Success.css'
+
+const route = useRoute()
+const router = useRouter()
+
+const appointmentDate = route.query.date || ''
+</script>
+
 <template>
-  <div>
-    <Header/>
-    <div class="success-page-container">
-      <div class="success-container">
-        <p class="success-title">
-          Sukces!
-        </p>
-        <p class="success-text">
-          Udało Ci się złożyć zamówienie. <br/>
-          Twoje auto będzie gotowe: <br/>
-          17.03.2025 godz 18:45.
-        </p>
-        <p class="success-thanks-text">
-          Dziękujemy za zakupy!
-        </p>
-        <button class="success-button">
-          OK
-        </button>
-      </div>
+  <Header />
+  <div class="success-page-container">
+    <div class="success-container">
+      <p class="success-title">Sukces!</p>
+      <p class="success-text">
+        Udało Ci się umówić jazdę próbną<br />
+        Termin:<br /><br />
+        {{ appointmentDate || 'brak danych' }}
+      </p>
+      <p class="success-thanks-text">
+        Dziękujemy za skorzystanie z naszych usług!
+      </p>
+      <button class="success-button" @click="router.push('/main')">OK</button>
     </div>
   </div>
 </template>
-
-<script setup>
-import Header from '../../components/Header/Header.vue'
-</script>
-
-<style src="Success.css"></style>

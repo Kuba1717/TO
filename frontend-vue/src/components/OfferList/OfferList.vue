@@ -1,59 +1,119 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../store/auth'
+import api from '../../services/api'
 import './OfferList.css'
 
+const props = defineProps({
+  filters: Object,
+  marks: Array,
+  models: Array,
+  types: Array
+})
 
-const offersData = [
-  { id: 1, title: 'BMW Seria 3 318d Sport Line', price: '50,000 PLN', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV3KNYMCTrvLQ1_8oL0DDJEmDpIy_yidwkYw&s' },
-  { id: 2, title: 'BMW 3 Series', price: '60,000 PLN', image: 'https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhtZXo0OWNpenl1ZzItT1RPTU9UT1BMIn0.6OBLh5YS5om4q5OpcAQvRr-__m6ygqGoEaXB2uPUJU4/image;s=644x461' },
-  { id: 3, title: 'Mercedes C-Class', price: '70,000 PLN', image: 'https://devil-cars.pl/storage/images/FT4D2bLWZLPr62rKbf9wE49vclLe0GpLUEQJ7tWq.jpg' },
-  { id: 4, title: 'Toyota Corolla', price: '40,000 PLN', image: 'https://storage.googleapis.com/auto-planeta-prod.appspot.com/vehicles/ncDddPfjNwrcR7iGZvqG/thumb_1740660434973_Projekt%20bez%20nazwy%28810%29.webp?GoogleAccessId=ap-prod%40auto-planeta-prod.iam.gserviceaccount.com&Expires=32503680000&Signature=AuFC5Ax5gqBTALSXewGkChsyIj4XsB6OKTWR0s5ujzq0%2BUURIgEgczsGhuB0xjuTcW5CeDSatFtpwVz7L5HhPxWdey%2FzautjcgQsnrQh17cdVzwukj4kWIl6gTak5d%2BkxXQpV1D3U8wmy22v5aLnZ0jUaeRf%2BYEVrfhegXIsqd7Z%2FI7F96YnAduPRHRJzBeLOAkFyN3EpTpQhrpl8ahCzOe52roOvAfSZwq7bW%2F0SasPCdqQuurRfgJvzOPgYqX20kmFM0eVFco823IHJmsdf4NwGvcXO8QQPRhCbFCC7nSjK3mvNxFMHPWdsvKHFlTobzzX%2BzrxSSEGV7kFfx0ojg%3D%3D' },
-  { id: 5, title: 'BMW Seria 3 318d Sport Line', price: '50,000 PLN', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV3KNYMCTrvLQ1_8oL0DDJEmDpIy_yidwkYw&s' },
-  { id: 6, title: 'BMW 3 Series', price: '60,000 PLN', image: 'https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhtZXo0OWNpenl1ZzItT1RPTU9UT1BMIn0.6OBLh5YS5om4q5OpcAQvRr-__m6ygqGoEaXB2uPUJU4/image;s=644x461' },
-  { id: 7, title: 'Mercedes C-Class', price: '70,000 PLN', image: 'https://devil-cars.pl/storage/images/FT4D2bLWZLPr62rKbf9wE49vclLe0GpLUEQJ7tWq.jpg' },
-  { id: 8, title: 'Toyota Corolla', price: '40,000 PLN', image: 'https://storage.googleapis.com/auto-planeta-prod.appspot.com/vehicles/ncDddPfjNwrcR7iGZvqG/thumb_1740660434973_Projekt%20bez%20nazwy%28810%29.webp?GoogleAccessId=ap-prod%40auto-planeta-prod.iam.gserviceaccount.com&Expires=32503680000&Signature=AuFC5Ax5gqBTALSXewGkChsyIj4XsB6OKTWR0s5ujzq0%2BUURIgEgczsGhuB0xjuTcW5CeDSatFtpwVz7L5HhPxWdey%2FzautjcgQsnrQh17cdVzwukj4kWIl6gTak5d%2BkxXQpV1D3U8wmy22v5aLnZ0jUaeRf%2BYEVrfhegXIsqd7Z%2FI7F96YnAduPRHRJzBeLOAkFyN3EpTpQhrpl8ahCzOe52roOvAfSZwq7bW%2F0SasPCdqQuurRfgJvzOPgYqX20kmFM0eVFco823IHJmsdf4NwGvcXO8QQPRhCbFCC7nSjK3mvNxFMHPWdsvKHFlTobzzX%2BzrxSSEGV7kFfx0ojg%3D%3D' },
-  { id: 9, title: 'BMW Seria 3 318d Sport Line', price: '50,000 PLN', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV3KNYMCTrvLQ1_8oL0DDJEmDpIy_yidwkYw&s' },
-  { id: 10, title: 'BMW 3 Series', price: '60,000 PLN', image: 'https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6ImhtZXo0OWNpenl1ZzItT1RPTU9UT1BMIn0.6OBLh5YS5om4q5OpcAQvRr-__m6ygqGoEaXB2uPUJU4/image;s=644x461' },
-  { id: 11, title: 'Mercedes C-Class', price: '70,000 PLN', image: 'https://devil-cars.pl/storage/images/FT4D2bLWZLPr62rKbf9wE49vclLe0GpLUEQJ7tWq.jpg' },
-  { id: 12, title: 'Toyota Corolla', price: '40,000 PLN', image: 'https://storage.googleapis.com/auto-planeta-prod.appspot.com/vehicles/ncDddPfjNwrcR7iGZvqG/thumb_1740660434973_Projekt%20bez%20nazwy%28810%29.webp?GoogleAccessId=ap-prod%40auto-planeta-prod.iam.gserviceaccount.com&Expires=32503680000&Signature=AuFC5Ax5gqBTALSXewGkChsyIj4XsB6OKTWR0s5ujzq0%2BUURIgEgczsGhuB0xjuTcW5CeDSatFtpwVz7L5HhPxWdey%2FzautjcgQsnrQh17cdVzwukj4kWIl6gTak5d%2BkxXQpV1D3U8wmy22v5aLnZ0jUaeRf%2BYEVrfhegXIsqd7Z%2FI7F96YnAduPRHRJzBeLOAkFyN3EpTpQhrpl8ahCzOe52roOvAfSZwq7bW%2F0SasPCdqQuurRfgJvzOPgYqX20kmFM0eVFco823IHJmsdf4NwGvcXO8QQPRhCbFCC7nSjK3mvNxFMHPWdsvKHFlTobzzX%2BzrxSSEGV7kFfx0ojg%3D%3D' },
-];
+const authStore = useAuthStore()
+const router = useRouter()
+const offers = ref([])
+const currentPage = ref(1)
+const offersPerPage = 8
 
-const currentPage = ref(1);
-const offersPerPage = 8;
+const fetchOffers = async () => {
+  try {
+    const response = await api.get('/announcement/with-images')
+    offers.value = response.data
+  } catch (error) {
+    console.error('Błąd pobierania ogłoszeń:', error)
+  }
+}
+
+const getModelName = (id) => props.models.find(m => m.id === id)?.name || ''
+const getMarkName = (modelId) => {
+  const model = props.models.find(m => m.id === modelId)
+  return props.marks.find(mark => mark.id === model?.markId)?.name || ''
+}
+const getTypeName = (id) => props.types.find(t => t.id === id)?.name || ''
+
+const applyFilters = (offers) => {
+  return offers.filter((offer) => {
+    const v = offer.vehicle || {}
+    const markName = getMarkName(v.modelId)
+    const modelName = getModelName(v.modelId)
+    const typeName = getTypeName(v.typeId)
+    return (
+        (!props.filters.mark || markName.toLowerCase().includes(props.filters.mark.toLowerCase())) &&
+        (!props.filters.model || modelName.toLowerCase().includes(props.filters.model.toLowerCase())) &&
+        (!props.filters.type || typeName.toLowerCase().includes(props.filters.type.toLowerCase())) &&
+        (!props.filters.productionYear || v.productionYear <= props.filters.productionYear) &&
+        (!props.filters.colour || v.colour?.toLowerCase().includes(props.filters.colour.toLowerCase())) &&
+        (!props.filters.fuelType || v.fuelType?.toLowerCase().includes(props.filters.fuelType.toLowerCase())) &&
+        (!props.filters.engineCapacity || v.engineCapacity <= props.filters.engineCapacity) &&
+        (!props.filters.condition || v.condition?.toLowerCase().includes(props.filters.condition.toLowerCase())) &&
+        (!props.filters.power || v.power <= props.filters.power) &&
+        (!props.filters.mileage || v.mileage <= props.filters.mileage)
+    )
+  })
+}
+
+const filteredOffers = computed(() => applyFilters(offers.value))
 
 const currentOffers = computed(() => {
-  const indexOfLastOffer = currentPage.value * offersPerPage;
-  const indexOfFirstOffer = indexOfLastOffer - offersPerPage;
-  return offersData.slice(indexOfFirstOffer, indexOfLastOffer);
-});
+  const indexOfLastOffer = currentPage.value * offersPerPage
+  const indexOfFirstOffer = indexOfLastOffer - offersPerPage
+  return filteredOffers.value.slice(indexOfFirstOffer, indexOfLastOffer)
+})
 
 const totalPages = computed(() => {
-  return Math.ceil(offersData.length / offersPerPage);
-});
+  return Math.ceil(filteredOffers.value.length / offersPerPage)
+})
 
 const handlePageChange = (pageNumber) => {
-  currentPage.value = pageNumber;
-};
-</script>
+  currentPage.value = pageNumber
+}
 
+const navigateToOffer = (offerId) => {
+  router.push(`/offer/${offerId}`)
+}
+
+watch(() => props.filters, () => {
+  currentPage.value = 1
+}, { deep: true })
+
+onMounted(() => {
+  fetchOffers()
+})
+</script>
 
 <template>
   <div class="offer-list">
-    <div v-for="offer in currentOffers" :key="offer.id" class="offer-card">
+    <div
+        v-for="offer in currentOffers"
+        :key="offer.id"
+        class="offer-card"
+        @click="navigateToOffer(offer.id)"
+        style="cursor: pointer"
+    >
       <div class="offer-list-horizontal-container">
-        <img :src="offer.image" :alt="offer.title"/>
+        <a-carousel autoplay :dots="false" class="offer-carousel">
+          <div v-for="(img, idx) in (offer.imageUrls || [offer.imageUrl])" :key="idx" class="carousel-slide">
+            <img :src="img" :alt="`${offer.name} ${idx + 1}`" />
+          </div>
+        </a-carousel>
+
         <div class="offer-list-vertical-container">
-          <h3 class="offer-title">{{ offer.title }}</h3>
+          <h3 class="offer-title">{{ offer.name }}</h3>
           <p class="offer-location">
-            Warszawa, Ursynów - 05 marca 2025 <br/>
-            2018 - 188 000 km
+            {{ offer.location }} - {{ new Date(offer.placedDate).toLocaleDateString() }}
           </p>
         </div>
-        <p class="offer-price">{{ offer.price }}</p>
+
+        <p class="offer-price">
+          {{ offer.price != null ? `${offer.price.toLocaleString()} PLN` : 'Brak' }}
+        </p>
       </div>
     </div>
 
-    <div class="pagination">
+    <div class="pagination" v-if="totalPages > 1">
       <button
           v-for="page in totalPages"
           :key="page"
@@ -65,4 +125,3 @@ const handlePageChange = (pageNumber) => {
     </div>
   </div>
 </template>
-

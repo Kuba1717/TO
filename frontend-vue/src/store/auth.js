@@ -63,7 +63,7 @@ export const useAuthStore = defineStore('auth', {
 
                 await this.getUserInfo()
 
-                router.push('/home')
+                await router.push('/main')
             } catch (error) {
                 this.error = error.response?.data?.message || 'Login failed'
                 throw error
@@ -89,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
                 console.error('Logout error:', error)
             } finally {
                 this.clearAuth()
-                router.push('/login')
+                await router.push('/main')
             }
         },
 
@@ -108,7 +108,7 @@ export const useAuthStore = defineStore('auth', {
                 return response.data
             } catch (error) {
                 this.clearAuth()
-                router.push('/login')
+                await router.push('/login')
                 throw error
             }
         },

@@ -25,11 +25,15 @@ const handleMainClick = () => {
 
 const handleLogout = async () => {
   await authStore.logout();
-  await router.push('/login');
+  await router.push('/main');
 };
 
 const handleProfileClick = () => {
   router.push('/profile');
+};
+
+const handleHistoryClick = () => {
+  router.push('/history');
 };
 </script>
 
@@ -45,6 +49,13 @@ const handleProfileClick = () => {
           aria-label="Profile"
       >
         <vue-feather type="user" class="button-icon" size="24"></vue-feather>
+      </button>
+      <button
+          class="icon-button history-button"
+          @click="handleHistoryClick"
+          aria-label="History"
+      >
+        <vue-feather type="clock" class="button-icon" size="24"></vue-feather>
       </button>
       <button
           class="icon-button logout-button"
