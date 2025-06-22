@@ -41,6 +41,32 @@ class VueAdapter {
             });
         });
     }
+
+    async measureFilteringTime(page) {
+        return await page.evaluate(() => {
+            return new Promise((resolve) => {
+                const testData = Array.from({ length: 10000 }, (_, i) => ({
+                    id: i,
+                    name: `Item ${i}`,
+                    category: `Category ${i % 10}`,
+                    value: Math.random() * 1000,
+                    active: Math.random() > 0.5,
+                    year: 2000 + (i % 24),
+                    price: Math.random() * 50000
+                }));
+
+                if (window.runVueFilterTest) {
+                    const startTime = performance.now();
+                    window.runVueFilterTest(testData).then(() => {
+                        const endTime = performance.now();
+                        resolve(endTime - startTime);
+                    });
+                } else {
+                    resolve(0);
+                }
+            });
+        });
+    }
 }
 
 module.exports = VueAdapter;

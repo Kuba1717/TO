@@ -118,11 +118,18 @@ class PerformanceTestRunner {
     async testRoute(appType, route) {
         const appConfig = config.applications[appType];
         const url = `${appConfig.baseUrl}${route.path}`;
+        const isMainPage = route.path === '/main';
+
         const routeResults = {
             loadTime: { values: [] },
             renderTime: { values: [] },
             memoryUsage: { values: [] }
         };
+
+        if (isMainPage) {
+            routeResults.clientFiltering = { values: [] };
+        }
+
         const warmupIterations = config.warmupIterations;
         console.log(`    Performing ${warmupIterations} warm-up iterations...`);
         for (let i = 0; i < warmupIterations; i++) {
@@ -134,6 +141,9 @@ class PerformanceTestRunner {
                 await loadTimeMetric.measure(page, url);
                 await renderTimeMetric.measure(page, url);
                 await memoryUsageMetric.measure(page, url);
+                if (isMainPage) {
+                    await renderTimeMetric.measureFiltering(page, url);
+                }
 
                 console.log(`      Warm-up iteration ${i + 1}/${warmupIterations} completed`);
             } catch (error) {
@@ -158,6 +168,11 @@ class PerformanceTestRunner {
                 routeResults.loadTime.values.push(loadTime);
                 routeResults.renderTime.values.push(renderTime);
                 routeResults.memoryUsage.values.push(memoryUsage);
+
+                if (isMainPage) {
+                    const clientFiltering = await renderTimeMetric.measureFiltering(page, url);
+                    routeResults.clientFiltering.values.push(clientFiltering);
+                }
 
                 if (config.screenshots) {
                     const screenshotDir = path.join(config.screenshotDir, appType);

@@ -25,35 +25,58 @@ class ReactAdapter {
                 let totalRenderTime = 0;
                 let renderCount = 0;
 
-                const originalCommit = renderer.currentDispatcherRef.current.useCallback;
-                renderer.currentDispatcherRef.current.useCallback = (callback, deps) => {
-                    const wrappedCallback = (...args) => {
-                        const startTime = performance.now();
-                        const result = callback(...args);
-                        const endTime = performance.now();
+                performance.mark('react-render-start');
 
-                        totalRenderTime += (endTime - startTime);
-                        renderCount++;
-
-                        return result;
-                    };
-
-                    return originalCommit(wrappedCallback, deps);
-                };
-
-                window.forceUpdate = () => {
-                    const root = document.getElementById('root');
-                    if (root && root._reactRootContainer) {
-                        root._reactRootContainer._internalRoot.current.stateNode.render();
-                    }
-                };
-
-                window.forceUpdate();
+                const root = document.getElementById('root');
+                if (root && root._reactRootContainer) {
+                    root._reactRootContainer._internalRoot.current.stateNode.render();
+                } else if (window.React && window.ReactDOM) {
+                    const event = new Event('forceUpdate');
+                    document.dispatchEvent(event);
+                }
 
                 setTimeout(() => {
-                    renderer.currentDispatcherRef.current.useCallback = originalCommit;
+                    performance.mark('react-render-end');
+                    performance.measure('react-render', 'react-render-start', 'react-render-end');
+
+                    const measurements = performance.getEntriesByName('react-render');
+                    if (measurements.length > 0) {
+                        totalRenderTime = measurements[0].duration;
+                        renderCount = 1;
+                    }
+
+                    performance.clearMarks('react-render-start');
+                    performance.clearMarks('react-render-end');
+                    performance.clearMeasures('react-render');
+
                     resolve(renderCount > 0 ? totalRenderTime / renderCount : 0);
-                }, 1000);
+                }, 100);
+            });
+        });
+    }
+
+    async measureFilteringTime(page) {
+        return await page.evaluate(() => {
+            return new Promise((resolve) => {
+                const testData = Array.from({ length: 10000 }, (_, i) => ({
+                    id: i,
+                    name: `Item ${i}`,
+                    category: `Category ${i % 10}`,
+                    value: Math.random() * 1000,
+                    active: Math.random() > 0.5,
+                    year: 2000 + (i % 24),
+                    price: Math.random() * 50000
+                }));
+
+                if (window.runReactFilterTest) {
+                    const startTime = performance.now();
+                    window.runReactFilterTest(testData).then(() => {
+                        const endTime = performance.now();
+                        resolve(endTime - startTime);
+                    });
+                } else {
+                    resolve(0);
+                }
             });
         });
     }

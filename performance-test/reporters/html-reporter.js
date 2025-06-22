@@ -78,23 +78,38 @@ class HtmlReporter {
         const metrics = {
             'loadTime': 'ms',
             'renderTime': 'ms',
-            'memoryUsage': 'bytes'
+            'memoryUsage': 'bytes',
+            'clientFiltering': 'ms'
         };
 
         for (const [metric, unit] of Object.entries(metrics)) {
-            const reactSum = Object.values(results.react).reduce((sum, route) => {
-                return sum + (route[metric]?.mean || 0);
-            }, 0);
+            let reactSum = 0;
+            let vueSum = 0;
+            let reactCount = 0;
+            let vueCount = 0;
 
-            const vueSum = Object.values(results.vue).reduce((sum, route) => {
-                return sum + (route[metric]?.mean || 0);
-            }, 0);
+            for (const [route, data] of Object.entries(results.react)) {
+                if (metric === 'clientFiltering' && (route === '/login' || route === '/register')) {
+                    continue;
+                }
+                if (data[metric]?.mean) {
+                    reactSum += data[metric].mean;
+                    reactCount++;
+                }
+            }
 
-            const reactRoutes = Object.keys(results.react).length || 1;
-            const vueRoutes = Object.keys(results.vue).length || 1;
+            for (const [route, data] of Object.entries(results.vue)) {
+                if (metric === 'clientFiltering' && (route === '/login' || route === '/register')) {
+                    continue;
+                }
+                if (data[metric]?.mean) {
+                    vueSum += data[metric].mean;
+                    vueCount++;
+                }
+            }
 
-            const reactAvg = reactSum / reactRoutes;
-            const vueAvg = vueSum / vueRoutes;
+            const reactAvg = reactCount > 0 ? reactSum / reactCount : 0;
+            const vueAvg = vueCount > 0 ? vueSum / vueCount : 0;
 
             const diff = reactAvg - vueAvg;
             const percentDiff = vueAvg !== 0 ? (diff / vueAvg) * 100 : 0;
@@ -132,7 +147,8 @@ class HtmlReporter {
         const metrics = {
             'loadTime': 'ms',
             'renderTime': 'ms',
-            'memoryUsage': 'bytes'
+            'memoryUsage': 'bytes',
+            'clientFiltering': 'ms'
         };
 
         for (const routePath in results.react) {
@@ -151,6 +167,10 @@ class HtmlReporter {
         </tr>`;
 
             for (const [metric, unit] of Object.entries(metrics)) {
+                if (metric === 'clientFiltering' && (routePath === '/login' || routePath === '/register')) {
+                    continue;
+                }
+
                 const reactMetric = results.react[routePath]?.[metric];
                 const vueMetric = results.vue[routePath]?.[metric];
 
@@ -198,7 +218,7 @@ class HtmlReporter {
 
     generateBoxPlotContainers(results) {
         let html = '';
-        const metrics = ['loadTime', 'renderTime', 'memoryUsage'];
+        const metrics = ['loadTime', 'renderTime', 'memoryUsage', 'clientFiltering'];
 
         for (const routePath in results.react) {
             if (!results.vue[routePath]) continue;
@@ -206,6 +226,10 @@ class HtmlReporter {
             html += `<h3>Distribution Analysis for Route: ${routePath}</h3>`;
 
             for (const metric of metrics) {
+                if (metric === 'clientFiltering' && (routePath === '/login' || routePath === '/register')) {
+                    continue;
+                }
+
                 const reactMetric = results.react[routePath]?.[metric];
                 const vueMetric = results.vue[routePath]?.[metric];
 
@@ -248,32 +272,50 @@ class HtmlReporter {
             if (!results.vue[routePath]) continue;
 
             const chartId = `chart-${this.sanitizeId(routePath)}`;
+            const includeFiltering = routePath !== '/login' && routePath !== '/register';
 
             const reactData = {
                 loadTime: results.react[routePath]?.loadTime?.mean || 0,
                 renderTime: results.react[routePath]?.renderTime?.mean || 0,
-                memoryUsage: results.react[routePath]?.memoryUsage?.mean || 0
+                memoryUsage: results.react[routePath]?.memoryUsage?.mean || 0,
+                clientFiltering: includeFiltering ? (results.react[routePath]?.clientFiltering?.mean || 0) : 0
             };
 
             const vueData = {
                 loadTime: results.vue[routePath]?.loadTime?.mean || 0,
                 renderTime: results.vue[routePath]?.renderTime?.mean || 0,
-                memoryUsage: results.vue[routePath]?.memoryUsage?.mean || 0
+                memoryUsage: results.vue[routePath]?.memoryUsage?.mean || 0,
+                clientFiltering: includeFiltering ? (results.vue[routePath]?.clientFiltering?.mean || 0) : 0
             };
+
+            const labels = includeFiltering ?
+                ['Load Time', 'Render Time', 'Memory Usage', 'Client Filtering'] :
+                ['Load Time', 'Render Time', 'Memory Usage'];
 
             const maxValues = {
                 loadTime: Math.max(reactData.loadTime, vueData.loadTime) || 1,
                 renderTime: Math.max(reactData.renderTime, vueData.renderTime) || 1,
-                memoryUsage: Math.max(reactData.memoryUsage, vueData.memoryUsage) || 1
+                memoryUsage: Math.max(reactData.memoryUsage, vueData.memoryUsage) || 1,
+                clientFiltering: includeFiltering ? (Math.max(reactData.clientFiltering, vueData.clientFiltering) || 1) : 1
             };
 
-            const normalizedReactData = [
+            const normalizedReactData = includeFiltering ? [
+                (reactData.loadTime / maxValues.loadTime) * 100 || 0,
+                (reactData.renderTime / maxValues.renderTime) * 100 || 0,
+                (reactData.memoryUsage / maxValues.memoryUsage) * 100 || 0,
+                (reactData.clientFiltering / maxValues.clientFiltering) * 100 || 0
+            ] : [
                 (reactData.loadTime / maxValues.loadTime) * 100 || 0,
                 (reactData.renderTime / maxValues.renderTime) * 100 || 0,
                 (reactData.memoryUsage / maxValues.memoryUsage) * 100 || 0
             ];
 
-            const normalizedVueData = [
+            const normalizedVueData = includeFiltering ? [
+                (vueData.loadTime / maxValues.loadTime) * 100 || 0,
+                (vueData.renderTime / maxValues.renderTime) * 100 || 0,
+                (vueData.memoryUsage / maxValues.memoryUsage) * 100 || 0,
+                (vueData.clientFiltering / maxValues.clientFiltering) * 100 || 0
+            ] : [
                 (vueData.loadTime / maxValues.loadTime) * 100 || 0,
                 (vueData.renderTime / maxValues.renderTime) * 100 || 0,
                 (vueData.memoryUsage / maxValues.memoryUsage) * 100 || 0
@@ -283,7 +325,7 @@ class HtmlReporter {
         new Chart(document.getElementById('${chartId}'), {
           type: 'bar',
           data: {
-            labels: ['Load Time', 'Render Time',  'Memory Usage'],
+            labels: ${JSON.stringify(labels)},
             datasets: [
               {
                 label: 'React',
@@ -337,12 +379,16 @@ class HtmlReporter {
 
     generateBoxPlotCode(results) {
         let code = '';
-        const metrics = ['loadTime', 'renderTime', 'memoryUsage'];
+        const metrics = ['loadTime', 'renderTime', 'memoryUsage', 'clientFiltering'];
 
         for (const routePath in results.react) {
             if (!results.vue[routePath]) continue;
 
             for (const metric of metrics) {
+                if (metric === 'clientFiltering' && (routePath === '/login' || routePath === '/register')) {
+                    continue;
+                }
+
                 const reactMetric = results.react[routePath]?.[metric];
                 const vueMetric = results.vue[routePath]?.[metric];
 
@@ -359,7 +405,6 @@ class HtmlReporter {
                 const reactValues = reactMetric.originalValues;
                 const vueValues = vueMetric.originalValues;
 
-                // Calculate React min/max with 5% padding
                 const reactMin = Math.min(...reactValues);
                 const reactMax = Math.max(...reactValues);
                 const reactRange = Math.max(reactMax - reactMin, 1);
@@ -367,7 +412,6 @@ class HtmlReporter {
                 const reactMinValue = Math.floor(reactMin - reactPadding);
                 const reactMaxValue = Math.ceil(reactMax + reactPadding);
 
-                // Calculate Vue min/max with 5% padding
                 const vueMin = Math.min(...vueValues);
                 const vueMax = Math.max(...vueValues);
                 const vueRange = Math.max(vueMax - vueMin, 1);
@@ -480,7 +524,14 @@ class HtmlReporter {
     }
 
     formatMetricName(name) {
-        return name
+        const nameMap = {
+            'clientFiltering': 'Client Filtering',
+            'loadTime': 'Load Time',
+            'renderTime': 'Render Time',
+            'memoryUsage': 'Memory Usage'
+        };
+
+        return nameMap[name] || name
             .replace(/([A-Z])/g, ' $1')
             .replace(/^./, str => str.toUpperCase());
     }
