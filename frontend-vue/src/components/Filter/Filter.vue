@@ -1,5 +1,4 @@
-Header.css
-Header.vue<script setup>
+<script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useAuthStore } from '../../store/auth'
 import api from '../../services/api'
@@ -49,8 +48,28 @@ const fetchData = async () => {
   }
 }
 
-onMounted(() => {
-  fetchData()
+onMounted(async () => {
+  await fetchData()
+
+  window.triggerVueRender = () => {
+    return new Promise(resolve => {
+      filters.value = { ...filters.value, mark: 'TestRender' + Math.random() }
+      resolve()
+    })
+  }
+
+  window.runVueFilterTest = (testData) => {
+    return new Promise(resolve => {
+      const filtered = testData.filter(item => {
+        return item.active &&
+            item.value > 500 &&
+            item.name.includes('5') &&
+            item.year > 2010 &&
+            item.price < 30000
+      })
+      resolve(filtered)
+    })
+  }
 })
 
 watch(filters, (newFilters) => {
@@ -78,7 +97,7 @@ const conditionOptions = ['Nowy', 'Używany']
 </script>
 
 <template>
-  <div class="filter">
+  <div class="filter" data-testid="filter-test-ready">
     <p class="filter-title">Filtry</p>
 
     <p class="filter-category-title">Marka</p>

@@ -24,22 +24,46 @@ const Filter = ({ onFilterChange, setSharedData }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const [marksRes, modelsRes, typesRes] = await Promise.all([
-                api.get('/mark'),
-                api.get('/model'),
-                api.get('/type')
-            ]);
-            setMarks(marksRes.data);
-            setModels(modelsRes.data);
-            setTypes(typesRes.data);
-            if (setSharedData) {
-                setSharedData.setMarks(marksRes.data);
-                setSharedData.setModels(modelsRes.data);
-                setSharedData.setTypes(typesRes.data);
+            try {
+                const [marksRes, modelsRes, typesRes] = await Promise.all([
+                    api.get('/mark'),
+                    api.get('/model'),
+                    api.get('/type')
+                ]);
+                setMarks(marksRes.data);
+                setModels(modelsRes.data);
+                setTypes(typesRes.data);
+                if (setSharedData) {
+                    setSharedData.setMarks(marksRes.data);
+                    setSharedData.setModels(modelsRes.data);
+                    setSharedData.setTypes(typesRes.data);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
+
+        window.triggerReactRender = () => {
+            return new Promise(resolve => {
+                setFilters(prev => ({ ...prev, mark: 'TestRender' + Math.random() }));
+                resolve();
+            });
+        };
+
+        window.runReactFilterTest = (testData) => {
+            return new Promise(resolve => {
+                const filtered = testData.filter(item => {
+                    return item.active &&
+                        item.value > 500 &&
+                        item.name.includes('5') &&
+                        item.year > 2010 &&
+                        item.price < 30000;
+                });
+                resolve(filtered);
+            });
+        };
     }, []);
 
     useEffect(() => {
@@ -48,7 +72,6 @@ const Filter = ({ onFilterChange, setSharedData }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         setFilters(prev => ({
             ...prev,
             [name]: value,
@@ -64,7 +87,7 @@ const Filter = ({ onFilterChange, setSharedData }) => {
         : models;
 
     return (
-        <div className="filter">
+        <div className="filter" data-testid="filter-test-ready">
             <p className="filter-title">Filtry</p>
 
             <p className="filter-category-title">Marka</p>
@@ -90,6 +113,7 @@ const Filter = ({ onFilterChange, setSharedData }) => {
                     <option key={type.id} value={type.name}>{type.name}</option>
                 ))}
             </select>
+
             <p className="filter-category-title">Kolor</p>
             <select className="filter-input-data" name="colour" value={filters.colour} onChange={handleChange}>
                 <option value="">-- wybierz --</option>
@@ -113,6 +137,7 @@ const Filter = ({ onFilterChange, setSharedData }) => {
                     <option key={cond} value={cond}>{cond}</option>
                 ))}
             </select>
+
             <p className="filter-category-title">Przebieg do {filters.mileage || 'dowolny'} km</p>
             <input
                 className="filter-input-data"
@@ -160,7 +185,6 @@ const Filter = ({ onFilterChange, setSharedData }) => {
                 value={filters.power}
                 onChange={handleChange}
             />
-
         </div>
     );
 };

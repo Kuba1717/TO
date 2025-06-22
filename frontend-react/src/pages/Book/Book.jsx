@@ -37,7 +37,7 @@ function Book() {
             await api.post("/appointment", {
                 name: "Jazda próbna",
                 status: "created",
-                appointmentDate: appointmentDate.toISOString(),
+                appointmentDate: appointmentDate.format('YYYY-MM-DDTHH:mm:ss'),
                 announcementId: offer.id
             });
 

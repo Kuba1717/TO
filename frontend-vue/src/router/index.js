@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../store/auth'
+import { watch } from 'vue'
 
 const routes = [
     { path: '/', redirect: '/main', name: 'RootRedirect' },
@@ -94,6 +95,8 @@ const router = createRouter({
     routes
 })
 
+let authWatcher = null
+
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore()
     const isAuthenticated = authStore.isAuthenticated
@@ -114,6 +117,26 @@ router.beforeEach((to, from, next) => {
     }
 
     next()
+})
+
+router.afterEach((to) => {
+    const authStore = useAuthStore()
+
+    if (authWatcher) {
+        authWatcher()
+    }
+
+    if (to.meta.requiresAuth) {
+        authWatcher = watch(
+            () => authStore.isAuthenticated,
+            (isAuthenticated) => {
+                if (!isAuthenticated) {
+                    router.push({ name: 'Login' })
+                }
+            },
+            { immediate: false }
+        )
+    }
 })
 
 export default router

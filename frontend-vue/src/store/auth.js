@@ -19,7 +19,23 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     getters: {
-        isAuthenticated: (state) => !!state.accessToken,
+        isAuthenticated: (state) => {
+            if (!state.accessToken || !state.user) return false
+
+            try {
+                const payload = state.accessToken.split('.')[1]
+                const decoded = JSON.parse(atob(payload))
+                const currentTime = Math.floor(Date.now() / 1000)
+
+                if (decoded.exp < currentTime) {
+                    return false
+                }
+
+                return true
+            } catch (error) {
+                return false
+            }
+        },
         userRoles: (state) => state.user?.roles || []
     },
 
@@ -105,10 +121,11 @@ export const useAuthStore = defineStore('auth', {
                 localStorage.setItem('accessToken', this.accessToken)
                 localStorage.setItem('refreshToken', this.refreshToken)
 
+                await this.getUserInfo()
+
                 return response.data
             } catch (error) {
                 this.clearAuth()
-                await router.push('/login')
                 throw error
             }
         },
@@ -145,6 +162,12 @@ export const useAuthStore = defineStore('auth', {
 
         hasRole(role) {
             return this.userRoles.includes(role)
+        },
+
+        checkTokenExpiration() {
+            if (!this.isAuthenticated) {
+                this.clearAuth()
+            }
         }
     }
 })
