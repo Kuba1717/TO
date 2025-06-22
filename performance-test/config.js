@@ -2,7 +2,7 @@ const config = {
     applications: {
         react: {
             name: 'React Application',
-            baseUrl: 'http://localhost:5174',
+            baseUrl: 'http://localhost:5173',
             apiUrl: 'http://localhost:8080',
             routes: [
                 { path: '/login', name: 'Login' },
@@ -12,7 +12,7 @@ const config = {
         },
         vue: {
             name: 'Vue Application',
-            baseUrl: 'http://localhost:5173',
+            baseUrl: 'http://localhost:5174',
             apiUrl: 'http://localhost:8080',
             routes: [
                 { path: '/login', name: 'Login' },
@@ -27,8 +27,8 @@ const config = {
         'apiResponse',
         'memoryUsage'
     ],
-    testIterations: 3,
-    warmupIterations: 1,
+    testIterations: 5,
+    warmupIterations: 3,
     reportDir: './reports',
     headless: false,
     screenshots: false,

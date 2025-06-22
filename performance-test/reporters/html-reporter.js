@@ -29,8 +29,8 @@ class HtmlReporter {
           th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
           th { background-color: #f2f2f2; }
           tr:nth-child(even) { background-color: #f9f9f9; }
-          .react-win { background-color: #d4edda; }
-          .vue-win { background-color: #d1ecf1; }
+          .react-win { background-color: #d1ecf1; }
+          .vue-win { background-color: #d4edda; }
           .tie { background-color: #fff3cd; }
           .chart-container { height: 400px; margin-bottom: 40px; }
           .box-plot-container { height: 400px; margin-bottom: 40px; }
